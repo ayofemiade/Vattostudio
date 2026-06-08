@@ -306,15 +306,20 @@ export function HeroSection() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.52], [1, 0]);
   const textScale = useTransform(scrollYProgress, [0, 0.7], [1, 1.06]);
 
-  /* Background zooms in subtly — the camera pushes toward subject */
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.18]);
+  /* Background zooms in dramatically — the camera pushes toward subject */
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, prefersReducedMotion ? 1 : 1.28]);
+  const bgOpacity = useTransform(scrollYProgress, [0.35, 0.95], [1.0, 0.0]);
 
   /* 
     Veil: darkens with an elliptical radial gradient as the iris closes.
     The edges darken first (like a real iris), then the center follows. 
   */
-  const veilOpacity = useTransform(scrollYProgress, [0, 0.72], [0, 0.82]);
-  const cornersOpacity = useTransform(scrollYProgress, [0, 0.42], [1, 0]);
+  const veilOpacity = useTransform(scrollYProgress, [0, 0.72], [0, 0.95]);
+  const cornersOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+
+  /* Bottom stats table transitions */
+  const statsY = useTransform(scrollYProgress, [0, 0.6], [0, 60]);
+  const statsOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const d = 0.1; /* base animation delay */
 
@@ -332,7 +337,6 @@ export function HeroSection() {
         background: "var(--color-bg-deep)",
       }}
     >
-      {/* ── Background layer: cinematic camera visual with dynamic crossfade ── */}
       <motion.div
         className="hero-bg-wrapper"
         style={{
@@ -342,6 +346,7 @@ export function HeroSection() {
           scale: bgScale,
           x: bgX,
           y: bgY,
+          opacity: bgOpacity,
         }}
       >
         {/* Dark Mode Backdrop */}
@@ -514,7 +519,7 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
             >
-              <span style={{ color: "transparent", WebkitTextStroke: "1px var(--color-border-mid)" }}>
+              <span style={{ color: "var(--color-text-primary)" }}>
                 DESERVES TO{" "}
               </span>
               <span
@@ -586,17 +591,27 @@ export function HeroSection() {
                 background: "var(--color-gold)",
                 padding: "1rem 2.25rem",
                 border: "1px solid var(--color-gold)",
-                transition: "color 0.45s var(--ease-cinematic)",
+                transition: "color 0.45s var(--ease-cinematic), background 0.45s var(--ease-cinematic)",
               }}
               onMouseEnter={(e) => {
-                const fill = e.currentTarget.querySelector<HTMLElement>("[data-fill]");
-                if (fill) fill.style.transform = "translateX(0)";
-                e.currentTarget.style.color = "var(--color-gold)";
+                if (theme === "dark") {
+                  /* Dark mode: go transparent with gold border & text */
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--color-gold)";
+                  const fill = e.currentTarget.querySelector<HTMLElement>("[data-fill]");
+                  if (fill) fill.style.transform = "translateX(-101%)";
+                } else {
+                  /* Light mode: dark slide-fill */
+                  const fill = e.currentTarget.querySelector<HTMLElement>("[data-fill]");
+                  if (fill) fill.style.transform = "translateX(0)";
+                  e.currentTarget.style.color = "var(--color-gold)";
+                }
               }}
               onMouseLeave={(e) => {
+                e.currentTarget.style.background = "var(--color-gold)";
+                e.currentTarget.style.color = "#0A0A0A";
                 const fill = e.currentTarget.querySelector<HTMLElement>("[data-fill]");
                 if (fill) fill.style.transform = "translateX(-101%)";
-                e.currentTarget.style.color = "#0A0A0A";
               }}
             >
               <span
@@ -605,7 +620,7 @@ export function HeroSection() {
                 style={{
                   position: "absolute",
                   inset: 0,
-                  background: "var(--color-text-primary)",
+                  background: theme === "dark" ? "transparent" : "var(--color-text-primary)",
                   transform: "translateX(-101%)",
                   transition: "transform 0.5s cubic-bezier(0.76,0,0.24,1)",
                   zIndex: 0,
@@ -625,7 +640,6 @@ export function HeroSection() {
                 document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
               }}
               data-cursor
-              className="hover-gold-line"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -635,59 +649,81 @@ export function HeroSection() {
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 color: "var(--color-text-secondary)",
-                transition: "color 0.3s var(--ease-cinematic)",
-                padding: "0.5rem 0",
+                transition: "color 0.3s var(--ease-cinematic), border 0.3s var(--ease-cinematic), padding 0.3s var(--ease-cinematic)",
+                padding: theme === "dark" ? "0.75rem 1.5rem" : "0.5rem 0",
+                border: theme === "dark" ? "1px solid transparent" : "none",
+                background: "transparent",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-primary)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                if (theme === "dark") {
+                  el.style.color = "var(--color-gold)";
+                  el.style.borderColor = "var(--color-gold)";
+                } else {
+                  el.style.color = "var(--color-text-primary)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.color = "var(--color-text-secondary)";
+                if (theme === "dark") el.style.borderColor = "transparent";
+              }}
             >
               Start a Project
             </a>
           </Magnetic>
         </motion.div>
 
-        {/* ── Stats strip ── */}
+        {/* ── Stats strip scroll exit wrapper ── */}
         <motion.div
-          custom={d + 1.2}
-          variants={prefersReducedMotion ? {} : fadeUp}
-          initial="hidden"
-          animate="visible"
           style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 0,
-            marginTop: "clamp(4rem, 10vh, 9rem)",
-            paddingTop: "2rem",
-            borderTop: "1px solid var(--color-border)",
-            flexWrap: "wrap",
+            y: prefersReducedMotion ? 0 : statsY,
+            opacity: statsOpacity,
+            width: "100%",
           }}
         >
-          <StatItem value="60+" label="Projects Delivered" />
-          <div style={{ width: "1px", height: "40px", background: "var(--color-border)", alignSelf: "center", margin: "0 clamp(1.5rem, 3vw, 2.5rem)", flexShrink: 0 }} />
-          <StatItem value="4+" label="Years Active" />
-          <div style={{ width: "1px", height: "40px", background: "var(--color-border)", alignSelf: "center", margin: "0 clamp(1.5rem, 3vw, 2.5rem)", flexShrink: 0 }} />
-          <StatItem value="3" label="Continents Reached" />
+          <motion.div
+            custom={d + 1.2}
+            variants={prefersReducedMotion ? {} : fadeUp}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 0,
+              marginTop: "clamp(4rem, 10vh, 9rem)",
+              paddingTop: "2rem",
+              borderTop: "1px solid var(--color-border)",
+              flexWrap: "wrap",
+            }}
+          >
+            <StatItem value="60+" label="Projects Delivered" />
+            <div style={{ width: "1px", height: "40px", background: "var(--color-border)", alignSelf: "center", margin: "0 clamp(1.5rem, 3vw, 2.5rem)", flexShrink: 0 }} />
+            <StatItem value="4+" label="Years Active" />
+            <div style={{ width: "1px", height: "40px", background: "var(--color-border)", alignSelf: "center", margin: "0 clamp(1.5rem, 3vw, 2.5rem)", flexShrink: 0 }} />
+            <StatItem value="3" label="Continents Reached" />
 
-          <div style={{ marginLeft: "auto", alignSelf: "flex-end" }}>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: d + 1.6, duration: 0.8 }}
-              style={{
-                fontFamily: "var(--font-ibm-plex-mono)",
-                fontSize: "0.5rem",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "var(--color-text-tertiary)",
-                display: "block",
-                textAlign: "right",
-              }}
-            >
-              Creative Production Studio
-              <br />
-              <span style={{ color: "var(--color-gold)", opacity: 0.7 }}>Lagos, Nigeria</span>
-            </motion.span>
-          </div>
+            <div style={{ marginLeft: "auto", alignSelf: "flex-end" }}>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: d + 1.6, duration: 0.8 }}
+                style={{
+                  fontFamily: "var(--font-ibm-plex-mono)",
+                  fontSize: "0.5rem",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "var(--color-text-tertiary)",
+                  display: "block",
+                  textAlign: "right",
+                }}
+              >
+                Creative Production Studio
+                <br />
+                <span style={{ color: "var(--color-gold)", opacity: 0.7 }}>Lagos, Nigeria</span>
+              </motion.span>
+            </div>
+          </motion.div>
         </motion.div>
       </motion.div>
 

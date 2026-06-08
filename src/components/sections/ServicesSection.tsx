@@ -42,18 +42,27 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
   return (
     <motion.div
       ref={ref}
-      initial={prefersReducedMotion ? {} : { opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        delay:    index * 0.1,
-        duration: 0.85,
-        ease:     [0.25, 0.46, 0.45, 0.94],
-      }}
       data-cursor
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative border-b border-[var(--color-border)]"
+      className="relative"
     >
+      {/* Drawing row divider at bottom */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "1px" }} className="pointer-events-none">
+        <motion.div
+          initial={prefersReducedMotion ? { scaleX: 1 } : { scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: "-8%" }}
+          transition={{ delay: index * 0.1, duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
+          style={{
+            width: "100%",
+            height: "100%",
+            background: "var(--color-border)",
+            transformOrigin: "center",
+          }}
+        />
+      </div>
+
       {/* ══════════════════════════════════════════════
           MOBILE LAYOUT — Card style: image top, text bottom
           Hidden on md+ screens
@@ -209,54 +218,79 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
           }}
         />
 
-        {/* Index */}
-        <span
-          data-index
-          style={{
-            fontFamily:    "var(--font-ibm-plex-mono)",
-            fontSize:      "0.6875rem",
-            letterSpacing: "0.1em",
-            color:         hovered ? "var(--color-gold)" : "var(--color-text-tertiary)",
-            paddingTop:    "0.5rem",
-            transition:    "color 0.35s var(--ease-cinematic)",
-            position:      "relative",
-            zIndex:        2,
-          }}
-        >
-          {service.index}
-        </span>
-
-        {/* Content */}
-        <div style={{ position: "relative", zIndex: 2 }}>
-          <h3
+        {/* Index drop slide */}
+        <div style={{ overflow: "hidden", paddingTop: "0.5rem" }} className="relative z-10 self-start">
+          <motion.span
+            data-index
+            initial={prefersReducedMotion ? { y: 0 } : { y: "-100%" }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ delay: index * 0.1, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
-              fontFamily:    "var(--font-bebas)",
-              fontSize:      "clamp(2.25rem, 4.5vw, 4.25rem)",
-              letterSpacing: "0.02em",
-              color:         "var(--color-text-primary)",
-              lineHeight:    1,
-              marginBottom:  "0.9rem",
-              transform:     hovered ? "translateX(12px)" : "translateX(0px)",
-              transition:    "transform 0.5s var(--ease-cinematic), color 0.4s",
+              display:       "block",
+              fontFamily:    "var(--font-ibm-plex-mono)",
+              fontSize:      "0.6875rem",
+              letterSpacing: "0.1em",
+              color:         hovered ? "var(--color-gold)" : "var(--color-text-tertiary)",
+              transition:    "color 0.35s var(--ease-cinematic)",
             }}
           >
-            {service.title}
-          </h3>
-          <p
+            {service.index}
+          </motion.span>
+        </div>
+
+        {/* Content reveal */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            transform: hovered ? "translateX(12px)" : "translateX(0px)",
+            transition: "transform 0.5s var(--ease-cinematic)",
+          }}
+        >
+          <div style={{ overflow: "hidden" }}>
+            <motion.h3
+              initial={prefersReducedMotion ? {} : { clipPath: "inset(100% 0 0 0)", y: 22 }}
+              whileInView={{ clipPath: "inset(0% 0 0 0)", y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ delay: index * 0.1 + 0.05, duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                fontFamily:    "var(--font-bebas)",
+                fontSize:      "clamp(2.25rem, 4.5vw, 4.25rem)",
+                letterSpacing: "0.02em",
+                color:         "var(--color-text-primary)",
+                lineHeight:    1,
+                marginBottom:  "0.9rem",
+                transition:    "color 0.4s",
+              }}
+            >
+              {service.title}
+            </motion.h3>
+          </div>
+          
+          <motion.p
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ delay: index * 0.1 + 0.12, duration: 0.8, ease: "easeOut" }}
             style={{
               fontFamily: "var(--font-satoshi)",
               fontSize:   "clamp(0.875rem, 1.2vw, 1rem)",
               lineHeight: 1.75,
               color:      hovered ? "var(--color-text-primary)" : "var(--color-text-secondary)",
               maxWidth:   "54ch",
-              transform:     hovered ? "translateX(12px)" : "translateX(0px)",
-              transition:    "transform 0.5s var(--ease-cinematic), color 0.4s",
+              transition: "color 0.4s",
             }}
           >
             {service.description}
-          </p>
+          </motion.p>
+          
           {service.tagline && (
-            <p
+            <motion.p
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ delay: index * 0.1 + 0.18, duration: 0.8, ease: "easeOut" }}
               style={{
                 fontFamily: "var(--font-satoshi)",
                 fontSize:   "clamp(0.8rem, 1.1vw, 0.9rem)",
@@ -264,17 +298,19 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
                 color:      "var(--color-gold)",
                 fontStyle:  "italic",
                 marginTop:  "0.65rem",
-                transform:  hovered ? "translateX(12px)" : "translateX(0px)",
-                transition: "transform 0.5s var(--ease-cinematic)",
               }}
             >
               {service.tagline}
-            </p>
+            </motion.p>
           )}
         </div>
 
-        {/* Right side: tags + arrow */}
-        <div
+        {/* Right side: tags + arrow slide reveal */}
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ delay: index * 0.1 + 0.15, duration: 0.8, ease: "easeOut" }}
           style={{
             display:         "flex",
             flexDirection:   "column",
@@ -328,7 +364,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
           >
             <ArrowUpRight size={14} color="var(--color-gold)" strokeWidth={1.5} />
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -436,8 +472,22 @@ export function ServicesSection() {
           </motion.p>
         </div>
 
-        {/* Service list */}
-        <div style={{ borderTop: "1px solid var(--color-border)" }}>
+        {/* Service list with drawing top line */}
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px" }} className="pointer-events-none">
+            <motion.div
+              initial={prefersReducedMotion ? { scaleX: 1 } : { scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
+              style={{
+                width: "100%",
+                height: "100%",
+                background: "var(--color-border)",
+                transformOrigin: "center",
+              }}
+            />
+          </div>
           {SERVICES.map((service, i) => (
             <ServiceRow key={service.index} service={service} index={i} />
           ))}

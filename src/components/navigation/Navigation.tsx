@@ -211,6 +211,7 @@ export function Navigation() {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [hidden,    setHidden]    = useState(false);
   const [logoHover, setLogoHover] = useState(false);
+  const { theme }                 = useTheme();
   const prefersReducedMotion      = useReducedMotion();
   const lastScrollY               = useRef(0);
   const scrollTimer               = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -345,19 +346,30 @@ export function Navigation() {
                   color: "#0A0A0A",
                   background: "var(--color-gold)",
                   padding: "0.6rem 1.4rem",
-                  transition: "color 0.45s var(--ease-cinematic)",
+                  border: "1px solid var(--color-gold)",
+                  transition: "color 0.45s var(--ease-cinematic), background 0.45s var(--ease-cinematic)",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget;
-                  const fill = el.querySelector<HTMLElement>("[data-fill]");
-                  if (fill) fill.style.transform = "translateX(0)";
-                  el.style.color = "var(--color-gold)";
+                  if (theme === "dark") {
+                    /* Dark mode: transparent + gold outline */
+                    el.style.background = "transparent";
+                    el.style.color = "var(--color-gold)";
+                    const fill = el.querySelector<HTMLElement>("[data-fill]");
+                    if (fill) fill.style.transform = "translateX(-101%)";
+                  } else {
+                    /* Light mode: dark slide-fill */
+                    const fill = el.querySelector<HTMLElement>("[data-fill]");
+                    if (fill) fill.style.transform = "translateX(0)";
+                    el.style.color = "var(--color-gold)";
+                  }
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget;
+                  el.style.background = "var(--color-gold)";
+                  el.style.color = "#0A0A0A";
                   const fill = el.querySelector<HTMLElement>("[data-fill]");
                   if (fill) fill.style.transform = "translateX(-101%)";
-                  el.style.color = "#0A0A0A";
                 }}
               >
                 <span
@@ -366,7 +378,7 @@ export function Navigation() {
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "var(--color-text-primary)",
+                    background: theme === "dark" ? "transparent" : "var(--color-text-primary)",
                     transform: "translateX(-101%)",
                     transition: "transform 0.5s cubic-bezier(0.76,0,0.24,1)",
                   }}
