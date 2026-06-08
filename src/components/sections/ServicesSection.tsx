@@ -52,7 +52,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
       data-cursor
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative border-b border-white/[0.08]"
+      className="relative border-b border-[var(--color-border)]"
     >
       {/* ══════════════════════════════════════════════
           MOBILE LAYOUT — Card style: image top, text bottom
@@ -72,11 +72,11 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
               filter: "grayscale(10%) contrast(1.15) brightness(0.75)",
             }}
           />
-          {/* Subtle bottom gradient fade into white section */}
+          {/* Subtle bottom gradient fade into deep section background */}
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(10,10,10,0.95) 100%)",
+              background: "linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(var(--color-bg-deep-rgb), 0.95) 100%)",
             }}
           />
           {/* Index badge */}
@@ -108,7 +108,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
           </h3>
           <p
             className="font-body text-[14.5px] leading-relaxed mb-4"
-            style={{ color: "rgba(255,255,255,0.6)", maxWidth: "42ch" }}
+            style={{ color: "var(--color-text-secondary)", maxWidth: "42ch" }}
           >
             {service.description}
           </p>
@@ -124,9 +124,9 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
                 key={tag}
                 className="font-mono text-[9px] uppercase tracking-[0.16em] px-2.5 py-1.5 rounded-[2px]"
                 style={{
-                  color: "rgba(255,255,255,0.55)",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "var(--color-text-secondary)",
+                  background: "var(--color-surface-2)",
+                  border: "1px solid var(--color-border)",
                 }}
               >
                 {tag}
@@ -187,7 +187,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
           style={{
             position:      "absolute",
             inset:         0,
-            background:    "linear-gradient(to right, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.75) 45%, rgba(10,10,10,0.15) 100%)",
+            background:    "linear-gradient(to right, rgba(var(--color-bg-deep-rgb), 0.96) 0%, rgba(var(--color-bg-deep-rgb), 0.75) 45%, rgba(var(--color-bg-deep-rgb), 0.15) 100%)",
             zIndex:        1,
             pointerEvents: "none",
           }}
@@ -216,7 +216,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
             fontFamily:    "var(--font-ibm-plex-mono)",
             fontSize:      "0.6875rem",
             letterSpacing: "0.1em",
-            color:         hovered ? "var(--color-gold)" : "rgba(255,255,255,0.3)",
+            color:         hovered ? "var(--color-gold)" : "var(--color-text-tertiary)",
             paddingTop:    "0.5rem",
             transition:    "color 0.35s var(--ease-cinematic)",
             position:      "relative",
@@ -233,7 +233,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
               fontFamily:    "var(--font-bebas)",
               fontSize:      "clamp(2.25rem, 4.5vw, 4.25rem)",
               letterSpacing: "0.02em",
-              color:         hovered ? "var(--color-white)" : "rgba(255,255,255,0.95)",
+              color:         "var(--color-text-primary)",
               lineHeight:    1,
               marginBottom:  "0.9rem",
               transform:     hovered ? "translateX(12px)" : "translateX(0px)",
@@ -247,7 +247,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
               fontFamily: "var(--font-satoshi)",
               fontSize:   "clamp(0.875rem, 1.2vw, 1rem)",
               lineHeight: 1.75,
-              color:      hovered ? "rgba(255,255,255,0.78)" : "rgba(255,255,255,0.55)",
+              color:      hovered ? "var(--color-text-primary)" : "var(--color-text-secondary)",
               maxWidth:   "54ch",
               transform:     hovered ? "translateX(12px)" : "translateX(0px)",
               transition:    "transform 0.5s var(--ease-cinematic), color 0.4s",
@@ -293,9 +293,9 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
                 fontSize:      "0.5rem",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
-                color:         hovered ? "rgba(201,168,76,0.9)" : "rgba(255,255,255,0.5)",
-                background:    hovered ? "rgba(201,168,76,0.08)" : "rgba(255,255,255,0.04)",
-                border:        `1px solid ${hovered ? "rgba(201,168,76,0.35)" : "rgba(255,255,255,0.08)"}`,
+                color:         hovered ? "var(--color-gold)" : "var(--color-text-secondary)",
+                background:    hovered ? "var(--color-gold-dim)" : "var(--color-surface-2)",
+                border:        `1px solid ${hovered ? "var(--color-gold)" : "var(--color-border)"}`,
                 padding:       "0.25rem 0.5rem",
                 borderRadius:  "2px",
                 whiteSpace:    "nowrap",
@@ -348,8 +348,8 @@ export function ServicesSection() {
       aria-label="Our Offers"
       style={{
         padding:      "clamp(6rem, 11vh, 10rem) 0",
-        background:   "var(--color-bg)",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        background:   "var(--color-bg-deep)",
+        borderBottom: "1px solid var(--color-border)",
         position:     "relative",
         overflow:     "hidden",
       }}
@@ -426,7 +426,7 @@ export function ServicesSection() {
               fontFamily: "var(--font-satoshi)",
               fontSize:   "clamp(0.875rem, 1.1vw, 1rem)",
               lineHeight: 1.75,
-              color:      "var(--color-dim)",
+              color:      "var(--color-text-secondary)",
               maxWidth:   "28ch",
               textAlign:  "right",
             }}
@@ -437,7 +437,7 @@ export function ServicesSection() {
         </div>
 
         {/* Service list */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ borderTop: "1px solid var(--color-border)" }}>
           {SERVICES.map((service, i) => (
             <ServiceRow key={service.index} service={service} index={i} />
           ))}

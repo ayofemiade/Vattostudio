@@ -13,6 +13,7 @@ import {
 import { ArrowDown } from "lucide-react";
 import { Magnetic } from "@/components/ui/Magnetic";
 import Image from "next/image";
+import { useTheme } from "@/hooks/useTheme";
 
 /* (3D Camera Aperture removed to make cinematic camera picture fully visible) */
 
@@ -267,6 +268,7 @@ const fadeUp = {
              rises = seamless "scene change" to next section
 ════════════════════════════════════════════════════════ */
 export function HeroSection() {
+  const { theme } = useTheme();
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLElement>(null);
 
@@ -327,10 +329,10 @@ export function HeroSection() {
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        background: "var(--color-bg)",
+        background: "var(--color-bg-deep)",
       }}
     >
-      {/* ── Background layer: cinematic camera visual with subtle mouse parallax ── */}
+      {/* ── Background layer: cinematic camera visual with dynamic crossfade ── */}
       <motion.div
         className="hero-bg-wrapper"
         style={{
@@ -342,24 +344,54 @@ export function HeroSection() {
           y: bgY,
         }}
       >
-        <Image
-          src="/hero-camera.png"
-          alt="Cinematic camera backdrop"
-          fill
-          priority
-          style={{
-            objectFit: "cover",
-            objectPosition: "right center",
-            filter: "grayscale(8%) contrast(1.1) brightness(1.02)",
-          }}
-        />
-        {/* Soft custom gradient blending the left side into the dark background */}
+        {/* Dark Mode Backdrop */}
+        <motion.div
+          initial={false}
+          animate={{ opacity: theme === "dark" ? 1 : 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          style={{ position: "absolute", inset: 0 }}
+        >
+          <Image
+            src="/hero-camera.png"
+            alt="Cinematic camera backdrop"
+            fill
+            priority
+            style={{
+              objectFit: "cover",
+              objectPosition: "right center",
+              filter: "grayscale(8%) contrast(1.1) brightness(1.02)",
+            }}
+          />
+        </motion.div>
+
+        {/* Light Mode Backdrop */}
+        <motion.div
+          initial={false}
+          animate={{ opacity: theme === "light" ? 1 : 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          style={{ position: "absolute", inset: 0 }}
+        >
+          <Image
+            src="/hero-camera-light.png"
+            alt="Light studio camera backdrop"
+            fill
+            priority
+            style={{
+              objectFit: "cover",
+              objectPosition: "right center",
+              filter: "grayscale(3%) contrast(1.03) brightness(1.0)",
+            }}
+          />
+        </motion.div>
+
+        {/* Soft custom gradient blending the left side into the deep background */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to right, var(--color-bg) 15%, rgba(5,5,5,0.75) 45%, transparent 85%)",
+            background: "linear-gradient(to right, var(--color-bg-deep) 15%, rgba(var(--color-bg-deep-rgb), 0.75) 45%, transparent 85%)",
             pointerEvents: "none",
+            zIndex: 1,
           }}
         />
         {/* Protect navbar text readability by fading top of camera image */}
@@ -367,8 +399,9 @@ export function HeroSection() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to bottom, var(--color-bg) 0%, rgba(5,5,5,0.7) 120px, transparent 280px)",
+            background: "linear-gradient(to bottom, var(--color-bg-deep) 0%, rgba(var(--color-bg-deep-rgb), 0.7) 120px, transparent 280px)",
             pointerEvents: "none",
+            zIndex: 1,
           }}
         />
       </motion.div>
@@ -379,7 +412,7 @@ export function HeroSection() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 65% 65% at center, transparent 20%, rgba(10,10,10,0.96) 100%)",
+          background: "radial-gradient(ellipse 65% 65% at center, transparent 20%, rgba(var(--color-bg-deep-rgb), 0.96) 100%)",
           opacity: veilOpacity,
           zIndex: 5,
           pointerEvents: "none",
@@ -438,7 +471,7 @@ export function HeroSection() {
           style={{
             fontFamily: "var(--font-bebas)",
             letterSpacing: "0.01em",
-            color: "var(--color-white)",
+            color: "var(--color-text-primary)",
             marginBottom: "clamp(1.5rem, 2.5vh, 2.25rem)",
           }}
         >
@@ -460,7 +493,7 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
             >
-              <span style={{ color: "var(--color-white)" }}>YOUR </span>
+              <span style={{ color: "var(--color-text-primary)" }}>YOUR </span>
               <span style={{ color: "var(--color-gold)" }}>STORY</span>
             </motion.span>
           </span>
@@ -481,12 +514,12 @@ export function HeroSection() {
               initial="hidden"
               animate="visible"
             >
-              <span style={{ color: "transparent", WebkitTextStroke: "1px rgba(255,255,255,0.30)" }}>
+              <span style={{ color: "transparent", WebkitTextStroke: "1px var(--color-border-mid)" }}>
                 DESERVES TO{" "}
               </span>
               <span
                 style={{
-                  color: "var(--color-bg)",
+                  color: "#0A0A0A",
                   background: "var(--color-gold)",
                   WebkitTextStroke: "none",
                   padding: "0.07em clamp(0.25rem, 1.2vw, 0.75rem) 0.01em",
@@ -512,7 +545,7 @@ export function HeroSection() {
             fontFamily: "var(--font-satoshi)",
             fontSize: "clamp(0.9375rem, 1.5vw, 1.125rem)",
             lineHeight: 1.72,
-            color: "var(--color-dim)",
+            color: "var(--color-text-secondary)",
             maxWidth: "52ch",
             marginBottom: "clamp(2rem, 4vh, 3rem)",
           }}
@@ -549,7 +582,7 @@ export function HeroSection() {
                 textTransform: "uppercase",
                 position: "relative",
                 overflow: "hidden",
-                color: "var(--color-bg)",
+                color: "#0A0A0A",
                 background: "var(--color-gold)",
                 padding: "1rem 2.25rem",
                 border: "1px solid var(--color-gold)",
@@ -563,7 +596,7 @@ export function HeroSection() {
               onMouseLeave={(e) => {
                 const fill = e.currentTarget.querySelector<HTMLElement>("[data-fill]");
                 if (fill) fill.style.transform = "translateX(-101%)";
-                e.currentTarget.style.color = "var(--color-bg)";
+                e.currentTarget.style.color = "#0A0A0A";
               }}
             >
               <span
@@ -572,7 +605,7 @@ export function HeroSection() {
                 style={{
                   position: "absolute",
                   inset: 0,
-                  background: "#0A0A0A",
+                  background: "var(--color-text-primary)",
                   transform: "translateX(-101%)",
                   transition: "transform 0.5s cubic-bezier(0.76,0,0.24,1)",
                   zIndex: 0,
@@ -601,12 +634,12 @@ export function HeroSection() {
                 fontSize: "0.6875rem",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "var(--color-dim)",
+                color: "var(--color-text-secondary)",
                 transition: "color 0.3s var(--ease-cinematic)",
                 padding: "0.5rem 0",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-white)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-dim)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-primary)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-secondary)"; }}
             >
               Start a Project
             </a>
@@ -625,7 +658,7 @@ export function HeroSection() {
             gap: 0,
             marginTop: "clamp(4rem, 10vh, 9rem)",
             paddingTop: "2rem",
-            borderTop: "1px solid rgba(30,30,30,0.8)",
+            borderTop: "1px solid var(--color-border)",
             flexWrap: "wrap",
           }}
         >
@@ -645,7 +678,7 @@ export function HeroSection() {
                 fontSize: "0.5rem",
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
-                color: "rgba(136,136,128,0.45)",
+                color: "var(--color-text-tertiary)",
                 display: "block",
                 textAlign: "right",
               }}

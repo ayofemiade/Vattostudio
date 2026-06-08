@@ -99,8 +99,8 @@ export function Footer() {
       ref={sectionRef}
       aria-label="Vattostudio footer"
       style={{
-        background: "var(--color-bg)",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--color-bg-deep)",
+        borderTop: "1px solid var(--color-border)",
         padding: "clamp(4rem, 8vh, 7rem) 0 0",
         position: "relative",
         overflow: "hidden",
@@ -148,7 +148,7 @@ export function Footer() {
           initial={prefersReducedMotion ? {} : { opacity: 0, y: 35 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.85, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="flex flex-col items-start gap-8 pb-12 border-b border-[rgba(255,255,255,0.06)] md:flex-row md:items-end md:justify-between md:pb-16"
+          className="flex flex-col items-start gap-8 pb-12 border-b border-[var(--color-border)] md:flex-row md:items-end md:justify-between md:pb-16"
           style={{
             marginBottom: "clamp(4rem, 8vh, 6rem)",
           }}
@@ -191,7 +191,7 @@ export function Footer() {
               fontSize: "0.6875rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "var(--color-bg)",
+              color: "#0A0A0A",
               background: "var(--color-gold)",
               padding: "1.1rem 2.5rem",
               borderRadius: "2px",
@@ -208,7 +208,7 @@ export function Footer() {
             onMouseLeave={(e) => {
               const el = e.currentTarget;
               el.style.background = "var(--color-gold)";
-              el.style.color = "var(--color-bg)";
+              el.style.color = "#0A0A0A";
             }}
           >
             Start a Project
@@ -302,7 +302,7 @@ export function Footer() {
           initial={prefersReducedMotion ? {} : { opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col gap-4 py-8 border-t border-[rgba(255,255,255,0.06)] md:flex-row md:items-center md:justify-between"
+          className="flex flex-col gap-4 py-8 border-t border-[var(--color-border)] md:flex-row md:items-center md:justify-between"
         >
           <p
             style={{

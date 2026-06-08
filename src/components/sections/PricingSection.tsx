@@ -97,8 +97,8 @@ function PricingCard({
 
   // Styling properties depending on layout themes
   const baseCardStyles = plan.featured
-    ? "bg-[#0A0A0A] text-white border-[#C9A84C] shadow-xl"
-    : "bg-[#121212] text-white border-white/5 shadow-md shadow-black/20";
+    ? "bg-[var(--color-bg-deep)] text-[var(--color-text-primary)] border-[var(--color-gold)] shadow-xl"
+    : "bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border-[var(--color-border)] shadow-md";
 
   return (
     <motion.div
@@ -118,11 +118,11 @@ function PricingCard({
         transform: isHovered ? "translateY(-8px) scale(1.01)" : "translateY(0) scale(1)",
         filter: isAnyCardHovered && !isHovered ? "grayscale(30%) blur(0.4px)" : "grayscale(0%) blur(0px)",
         borderColor: plan.featured
-          ? "#C9A84C"
-          : (isHovered ? "rgba(255, 255, 255, 0.4)" : "rgba(255, 255, 255, 0.08)"),
+          ? "var(--color-gold)"
+          : (isHovered ? "var(--color-border-mid)" : "var(--color-border)"),
         boxShadow: plan.featured && isHovered
-          ? "0 24px 48px rgba(201, 168, 76, 0.15)"
-          : (isHovered ? "0 20px 40px rgba(0,0,0,0.3)" : "none"),
+          ? "0 24px 48px var(--color-gold-dim)"
+          : (isHovered ? "0 20px 40px rgba(0,0,0,0.15)" : "none"),
       }}
     >
       {/* Premium Metallic Shimmer Overlay */}
@@ -137,8 +137,8 @@ function PricingCard({
         className="absolute inset-0 pointer-events-none z-10"
         style={{
           background: plan.featured
-            ? "linear-gradient(135deg, transparent 30%, rgba(201, 168, 76, 0.12) 50%, transparent 70%)"
-            : "linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%)",
+            ? "linear-gradient(135deg, transparent 30%, var(--color-gold-dim) 50%, transparent 70%)"
+            : "linear-gradient(135deg, transparent 30%, var(--color-border) 50%, transparent 70%)",
         }}
       />
 
@@ -153,7 +153,7 @@ function PricingCard({
       <span
         className="font-mono text-[10px] tracking-[0.2em] uppercase mb-4 block"
         style={{
-          color: plan.featured ? "#C9A84C" : "rgba(255, 255, 255, 0.55)",
+          color: plan.featured ? "var(--color-gold)" : "var(--color-text-secondary)",
         }}
       >
         {plan.label}
@@ -170,7 +170,7 @@ function PricingCard({
             transition={{ duration: 0.35, ease: "easeOut" }}
             className="font-display text-[2.75rem] sm:text-[3.5rem] tracking-[0.01em] leading-none"
             style={{
-              color: "#FFFFFF",
+              color: "var(--color-text-primary)",
             }}
           >
             {priceDisplay}
@@ -181,7 +181,7 @@ function PricingCard({
           <span
             className="font-mono text-[11px] tracking-[0.1em] ml-2"
             style={{
-              color: plan.featured ? "rgba(255, 255, 255, 0.45)" : "rgba(255, 255, 255, 0.4)",
+              color: "var(--color-text-tertiary)",
             }}
           >
             {plan.period}
@@ -193,8 +193,8 @@ function PricingCard({
       <p
         className="font-body text-[13.5px] leading-relaxed mb-8 pb-8 border-b relative z-20"
         style={{
-          color: plan.featured ? "rgba(255, 255, 255, 0.65)" : "rgba(255, 255, 255, 0.55)",
-          borderColor: plan.featured ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.06)",
+          color: "var(--color-text-secondary)",
+          borderColor: "var(--color-border)",
         }}
       >
         {plan.tagline}
@@ -207,7 +207,7 @@ function PricingCard({
             key={fIdx}
             className="flex items-start gap-3.5 font-body text-[13.5px] leading-relaxed"
             style={{
-              color: "#FFFFFF",
+              color: "var(--color-text-primary)",
             }}
           >
             <motion.div
@@ -222,7 +222,7 @@ function PricingCard({
                 size={14}
                 strokeWidth={2.5}
                 style={{
-                  color: "#C9A84C",
+                  color: "var(--color-gold)",
                 }}
               />
             </motion.div>
@@ -242,14 +242,14 @@ function PricingCard({
         className="inline-flex justify-center items-center font-mono text-[10px] tracking-[0.2em] uppercase py-4 px-6 rounded-[2px] border relative z-20 transition-all duration-500"
         style={{
           background: plan.featured
-            ? (isHovered ? "transparent" : "#C9A84C")
-            : (isHovered ? "#FFFFFF" : "transparent"),
+            ? (isHovered ? "transparent" : "var(--color-gold)")
+            : (isHovered ? "var(--color-text-primary)" : "transparent"),
           color: plan.featured
-            ? (isHovered ? "#C9A84C" : "#0A0A0A")
-            : (isHovered ? "#0A0A0A" : "rgba(255, 255, 255, 0.7)"),
+            ? (isHovered ? "var(--color-gold)" : "var(--color-bg-deep)")
+            : (isHovered ? "var(--color-bg-deep)" : "var(--color-text-secondary)"),
           borderColor: plan.featured
-            ? "#C9A84C"
-            : (isHovered ? "#FFFFFF" : "rgba(255, 255, 255, 0.18)"),
+            ? "var(--color-gold)"
+            : (isHovered ? "var(--color-text-primary)" : "var(--color-border-mid)"),
           transform: isHovered ? "scale(1.02)" : "scale(1)",
         }}
       >
@@ -276,10 +276,10 @@ export function PricingSection() {
     <section
       id="pricing"
       aria-label="Pricing Section"
-      className="relative py-24 sm:py-36 bg-[#0A0A0A] border-t border-b border-white/[0.06] overflow-hidden"
+      className="relative py-24 sm:py-36 bg-[var(--color-bg-deep)] border-t border-b border-[var(--color-border)] overflow-hidden"
     >
       {/* Background radial soft light gradient */}
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#C9A84C] via-black to-black" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.06] transition-opacity duration-500" style={{ background: "radial-gradient(ellipse at top, var(--color-gold) 0%, transparent 70%)" }} />
 
       <div ref={containerRef} className="max-w-[1440px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
         
@@ -301,7 +301,7 @@ export function PricingSection() {
               initial={prefersReducedMotion ? {} : { clipPath: "inset(100% 0 0 0)", y: 35 }}
               animate={isHeadingInView ? { clipPath: "inset(0% 0 0 0)", y: 0 } : {}}
               transition={{ delay: 0.15, duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
-              className="font-display text-[3.25rem] sm:text-[4.5rem] md:text-[5.5rem] tracking-[0.02em] leading-[0.9] text-white"
+              className="font-display text-[3.25rem] sm:text-[4.5rem] md:text-[5.5rem] tracking-[0.02em] leading-[0.9] text-[var(--color-text-primary)]"
             >
               Transparent Pricing
             </motion.h2>
@@ -311,7 +311,7 @@ export function PricingSection() {
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 15 }}
             animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4, duration: 0.7 }}
-            className="font-body text-[15px] sm:text-[16px] text-white/60 max-w-[48ch] mx-auto leading-relaxed mb-10"
+            className="font-body text-[15px] sm:text-[16px] text-[var(--color-text-secondary)] max-w-[48ch] mx-auto leading-relaxed mb-10"
           >
             We believe you should know what you&apos;re working with before we even get on a call. Here&apos;s how we price our work.
           </motion.p>
@@ -321,14 +321,14 @@ export function PricingSection() {
             initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95 }}
             animate={isHeadingInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="relative flex items-center p-1 bg-white/[0.04] rounded-full border border-white/5"
+            className="relative flex items-center p-1 bg-[var(--color-surface-2)] rounded-full border border-[var(--color-border)]"
           >
             <div className="relative flex justify-between gap-1">
               <button
                 onClick={() => setCurrency("NGN")}
                 className="relative px-6 py-2 rounded-full font-mono text-[9px] tracking-[0.2em] uppercase font-bold transition-all z-20"
                 style={{
-                  color: currency === "NGN" ? "#0A0A0A" : "rgba(255, 255, 255, 0.5)",
+                  color: currency === "NGN" ? "var(--color-bg-deep)" : "var(--color-text-secondary)",
                 }}
               >
                 NGN [Local]
@@ -337,7 +337,7 @@ export function PricingSection() {
                 onClick={() => setCurrency("USD")}
                 className="relative px-6 py-2 rounded-full font-mono text-[9px] tracking-[0.2em] uppercase font-bold transition-all z-20"
                 style={{
-                  color: currency === "USD" ? "#0A0A0A" : "rgba(255, 255, 255, 0.5)",
+                  color: currency === "USD" ? "var(--color-bg-deep)" : "var(--color-text-secondary)",
                 }}
               >
                 USD [Global]
@@ -347,7 +347,7 @@ export function PricingSection() {
               <motion.div
                 layout
                 transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                className="absolute top-0 bottom-0 rounded-full bg-white shadow-md z-10"
+                className="absolute top-0 bottom-0 rounded-full bg-[var(--color-text-primary)] shadow-md z-10"
                 style={{
                   left: currency === "NGN" ? 0 : "50%",
                   width: "50%",
@@ -377,7 +377,7 @@ export function PricingSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="font-mono text-[10px] tracking-[0.16em] uppercase text-white/45 text-center mt-14 leading-relaxed"
+          className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-text-tertiary)] text-center mt-14 leading-relaxed"
         >
           All packages include an initial consultation call to understand your brand before we begin.
         </motion.p>

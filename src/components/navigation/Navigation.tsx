@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { useTheme } from "@/hooks/useTheme";
 
 /* ─── Navigation links ─── */
 const NAV_LINKS = [
@@ -120,6 +121,85 @@ function DesktopNavLink({
     <a href={href} className="nav-link" onClick={onClick} data-cursor>
       {label}
     </a>
+  );
+}
+
+/* ─── Bespoke Luxury Theme Toggle ─── */
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <Magnetic>
+      <button
+        onClick={toggleTheme}
+        className="relative flex items-center justify-center w-9 h-9 rounded-full border cursor-pointer transition-all duration-300"
+        style={{
+          background: "var(--glass-bg)",
+          borderColor: "var(--color-border)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          boxShadow: theme === "dark" 
+            ? "0 4px 12px rgba(0,0,0,0.2)" 
+            : "0 4px 12px rgba(10,10,10,0.04)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = "var(--color-gold)";
+          e.currentTarget.style.transform = "scale(1.06)";
+          e.currentTarget.style.boxShadow = "0 0 14px var(--color-gold-dim)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = "var(--color-border)";
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.boxShadow = theme === "dark" 
+            ? "0 4px 12px rgba(0,0,0,0.2)" 
+            : "0 4px 12px rgba(10,10,10,0.04)";
+        }}
+        aria-label="Toggle visual theme"
+        data-cursor
+      >
+        <div className="relative w-4 h-4 overflow-hidden flex items-center justify-center pointer-events-none">
+          {/* Moon Icon */}
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: theme === "dark" ? 1 : 0,
+              rotate: theme === "dark" ? 0 : 45,
+              scale: theme === "dark" ? 1 : 0.6,
+            }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </motion.div>
+
+          {/* Sun Icon */}
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: theme === "light" ? 1 : 0,
+              rotate: theme === "light" ? 0 : -45,
+              scale: theme === "light" ? 1 : 0.6,
+            }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+          </motion.div>
+        </div>
+      </button>
+    </Magnetic>
   );
 }
 
@@ -244,6 +324,9 @@ export function Navigation() {
               />
             ))}
 
+            {/* Bespoke Theme Switcher Toggle */}
+            <ThemeToggle />
+
             {/* CTA */}
             <Magnetic>
               <a
@@ -259,7 +342,7 @@ export function Navigation() {
                   fontSize: "0.6875rem",
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--color-bg)",
+                  color: "#0A0A0A",
                   background: "var(--color-gold)",
                   padding: "0.6rem 1.4rem",
                   transition: "color 0.45s var(--ease-cinematic)",
@@ -274,7 +357,7 @@ export function Navigation() {
                   const el = e.currentTarget;
                   const fill = el.querySelector<HTMLElement>("[data-fill]");
                   if (fill) fill.style.transform = "translateX(-101%)";
-                  el.style.color = "var(--color-bg)";
+                  el.style.color = "#0A0A0A";
                 }}
               >
                 <span
@@ -283,7 +366,7 @@ export function Navigation() {
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "#0A0A0A",
+                    background: "var(--color-text-primary)",
                     transform: "translateX(-101%)",
                     transition: "transform 0.5s cubic-bezier(0.76,0,0.24,1)",
                   }}
@@ -293,8 +376,9 @@ export function Navigation() {
             </Magnetic>
           </nav>
 
-          {/* Mobile hamburger — only visible below md */}
-          <div className="flex md:hidden">
+          {/* Mobile hamburger + theme toggle */}
+          <div className="flex md:hidden items-center gap-4">
+            <ThemeToggle />
             <Hamburger isOpen={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
           </div>
         </div>

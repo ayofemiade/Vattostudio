@@ -28,11 +28,11 @@ export function ContactSection() {
     width: "100%",
     background: "transparent",
     border: "none",
-    borderBottom: `1px solid ${focused === field ? "var(--color-gold)" : "rgba(10,10,10,0.15)"}`,
+    borderBottom: `1px solid ${focused === field ? "var(--color-gold)" : "var(--color-border-mid)"}`,
     padding: "1rem 0",
     fontFamily: "var(--font-satoshi)",
     fontSize: "1rem",
-    color: "var(--color-bg)",
+    color: "var(--color-text-primary)",
     outline: "none",
     transition: "border-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
     borderRadius: 0,
@@ -55,8 +55,8 @@ export function ContactSection() {
       aria-label="Contact Vattostudio"
       style={{
         padding: "clamp(5rem, 10vh, 9rem) 0",
-        background: "#FFFFFF",
-        borderTop: "1px solid rgba(0,0,0,0.06)",
+        background: "var(--color-bg-surface)",
+        borderTop: "1px solid var(--color-border)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -105,7 +105,7 @@ export function ContactSection() {
                 fontSize: "clamp(3rem, 9vw, 8rem)",
                 letterSpacing: "0.01em",
                 lineHeight: 0.9,
-                color: "var(--color-bg)",
+                color: "var(--color-text-primary)",
               }}
             >
               Let&apos;s Talk
@@ -121,7 +121,7 @@ export function ContactSection() {
               fontFamily: "var(--font-satoshi)",
               fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
               lineHeight: 1.75,
-              color: "rgba(10, 10, 10, 0.65)",
+              color: "var(--color-text-secondary)",
               maxWidth: "55ch",
               marginTop: "2rem",
             }}
@@ -267,7 +267,7 @@ export function ContactSection() {
                       background: "transparent",
                     }}
                   >
-                    <option value="" disabled style={{ background: "#FFFFFF", color: "rgba(10,10,10,0.5)" }}>
+                    <option value="" disabled style={{ background: "var(--color-bg-surface)", color: "var(--color-text-tertiary)" }}>
                       Select what you need
                     </option>
                     {[
@@ -278,7 +278,7 @@ export function ContactSection() {
                       "Full Studio Retainer",
                       "Something else",
                     ].map((opt) => (
-                      <option key={opt} value={opt} style={{ background: "#FFFFFF", color: "#0A0A0A" }}>
+                      <option key={opt} value={opt} style={{ background: "var(--color-bg-surface)", color: "var(--color-text-primary)" }}>
                         {opt}
                       </option>
                     ))}
@@ -347,24 +347,24 @@ export function ContactSection() {
                       fontSize: "0.6875rem",
                       letterSpacing: "0.2em",
                       textTransform: "uppercase",
-                      color: "var(--color-white)",
-                      background: "var(--color-bg)",
+                      color: "var(--color-bg-deep)",
+                      background: "var(--color-text-primary)",
                       padding: "1.1rem 2.5rem",
                       borderRadius: "2px",
-                      border: "1px solid var(--color-bg)",
+                      border: "1px solid var(--color-text-primary)",
                       cursor: "pointer",
                       transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                     }}
                     onMouseEnter={(e) => {
                       const el = e.currentTarget;
                       el.style.background = "transparent";
-                      el.style.color = "var(--color-bg)";
+                      el.style.color = "var(--color-text-primary)";
                       el.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
                       const el = e.currentTarget;
-                      el.style.background = "var(--color-bg)";
-                      el.style.color = "var(--color-white)";
+                      el.style.background = "var(--color-text-primary)";
+                      el.style.color = "var(--color-bg-deep)";
                       el.style.transform = "translateY(0)";
                     }}
                   >
@@ -395,11 +395,11 @@ export function ContactSection() {
                   gap: "0.5rem",
                   fontFamily: "var(--font-satoshi)",
                   fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
-                  color: "var(--color-bg)",
+                  color: "var(--color-text-primary)",
                   transition: "color 0.3s",
                 }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-gold)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-bg)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text-primary)"; }}
               >
                 <Mail size={14} strokeWidth={1.5} style={{ color: "var(--color-gold)" }} />
                 hello@vattostudio.com
@@ -416,7 +416,7 @@ export function ContactSection() {
                   gap: "0.5rem",
                   fontFamily: "var(--font-satoshi)",
                   fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
-                  color: "var(--color-bg)",
+                  color: "var(--color-text-primary)",
                 }}
               >
                 <MapPin size={14} strokeWidth={1.5} style={{ color: "var(--color-gold)" }} />
@@ -440,7 +440,7 @@ export function ContactSection() {
               style={{
                 padding: "1.5rem",
                 border: "1px solid var(--color-border)",
-                background: "var(--color-bg)",
+                background: "var(--color-bg-deep)",
                 borderRadius: "3px",
               }}
             >
@@ -455,7 +455,7 @@ export function ContactSection() {
                 style={{
                   fontFamily: "var(--font-satoshi)",
                   fontSize: "0.9375rem",
-                  color: "var(--color-white)",
+                  color: "var(--color-text-primary)",
                   lineHeight: 1.6,
                 }}
               >
@@ -487,8 +487,8 @@ export function ContactSection() {
                       width: "40px",
                       height: "40px",
                       borderRadius: "50%",
-                      border: "1px solid rgba(10,10,10,0.15)",
-                      color: "rgba(10,10,10,0.6)",
+                      border: "1px solid var(--color-border-mid)",
+                      color: "var(--color-text-secondary)",
                       transition: "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
                     }}
                     onMouseEnter={(e) => {
@@ -499,8 +499,8 @@ export function ContactSection() {
                     }}
                     onMouseLeave={(e) => {
                       const el = e.currentTarget;
-                      el.style.borderColor = "rgba(10,10,10,0.15)";
-                      el.style.color = "rgba(10,10,10,0.6)";
+                      el.style.borderColor = "var(--color-border-mid)";
+                      el.style.color = "var(--color-text-secondary)";
                       el.style.transform = "translateY(0)";
                     }}
                   >

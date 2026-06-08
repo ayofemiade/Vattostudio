@@ -112,7 +112,7 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
         overflow:       "hidden",
         background:     "var(--color-surface)",
         transition:     "transform 0.6s var(--ease-cinematic)",
-        border:         "1px solid rgba(10,10,10,0.08)",
+        border:         "1px solid var(--color-border)",
         cursor:         "pointer",
       }}
     >
@@ -264,7 +264,7 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
                 fontFamily:    "var(--font-bebas)",
                 fontSize:      index === 0 ? "clamp(2.25rem, 4.5vw, 4.5rem)" : "clamp(1.5rem, 2.5vw, 2.5rem)",
                 letterSpacing: "0.02em",
-                color:         "var(--color-white)",
+                color:         "#FFFFFF",
                 lineHeight:    0.95,
               }}
             >
@@ -312,8 +312,8 @@ export function PortfolioSection() {
       id="portfolio"
       aria-label="Selected Work"
       style={{
-        background: "#FFFFFF",
-        borderTop:  "1px solid rgba(10,10,10,0.08)",
+        background: "var(--color-bg-surface)",
+        borderTop:  "1px solid var(--color-border)",
         position:   "relative",
         overflow:   "visible", /* CRITICAL: Must be visible to allow sticky grid locking! */
       }}
@@ -406,7 +406,7 @@ export function PortfolioSection() {
                     fontSize:      "clamp(3.5rem, 8vw, 6.5rem)",
                     letterSpacing: "0.01em",
                     lineHeight:    0.92,
-                    color:         "var(--color-bg)",
+                    color:         "var(--color-text-primary)",
                     textAlign:     "center",
                   }}
                 >
@@ -417,10 +417,10 @@ export function PortfolioSection() {
 
                 <div className="mt-10">
                   <Button
-                    className="px-8 py-3 text-xs tracking-widest font-mono uppercase bg-transparent text-[#0A0A0A] border border-[#0A0A0A] hover:border-gold hover:text-gold transition-colors duration-300"
+                    className="px-8 py-3 text-xs tracking-widest font-mono uppercase bg-transparent text-[var(--color-text-primary)] border border-[var(--color-border-mid)] hover:border-gold hover:text-gold transition-colors duration-300"
                     style={{
                       borderRadius: "3px",
-                      borderColor: "rgba(10,10,10,0.22)",
+                      borderColor: "var(--color-border-mid)",
                       fontFamily: "var(--font-ibm-plex-mono)",
                       letterSpacing: "0.22em",
                     }}
@@ -468,7 +468,7 @@ export function PortfolioSection() {
               fontSize:      "3rem",
               letterSpacing: "0.01em",
               lineHeight:    0.95,
-              color:         "var(--color-bg)",
+              color:         "var(--color-text-primary)",
             }}
           >
             A Few Things
@@ -502,10 +502,10 @@ export function PortfolioSection() {
         {/* Mobile Bottom Dynamic Call-To-Action */}
         <div style={{ display: "flex", justifyContent: "center", marginTop: "3.5rem" }}>
           <Button
-            className="px-8 py-3 text-xs tracking-widest font-mono uppercase bg-transparent text-[#0A0A0A] border border-[#0A0A0A] hover:border-gold hover:text-gold transition-colors duration-300"
+            className="px-8 py-3 text-xs tracking-widest font-mono uppercase bg-transparent text-[var(--color-text-primary)] border border-[var(--color-border-mid)] hover:border-gold hover:text-gold transition-colors duration-300"
             style={{
               borderRadius: "3px",
-              borderColor: "rgba(10,10,10,0.22)",
+              borderColor: "var(--color-border-mid)",
               fontFamily: "var(--font-ibm-plex-mono)",
               letterSpacing: "0.22em",
             }}

@@ -6,6 +6,7 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { CinematicIntroWrapper } from "@/components/ui/CinematicIntroWrapper";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
+import { ThemeHydrator } from "@/components/providers/ThemeHydrator";
 
 /* IBM Plex Mono */
 const ibmPlexMono = IBM_Plex_Mono({
@@ -127,8 +128,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${ibmPlexMono.variable} ${bebasNeue.variable}`}>
+    <html lang="en" className={`${ibmPlexMono.variable} ${bebasNeue.variable}`} suppressHydrationWarning>
       <head>
+        {/* Anti-Flash Theme Hydrator Script */}
+        <script
+          id="theme-hydration"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var pref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  var active = saved || pref || 'dark';
+                  document.documentElement.setAttribute('data-theme', active);
+                } catch (e) {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                }
+              })()
+            `,
+          }}
+        />
+
         {/* Satoshi — from Fontshare CDN */}
         <link
           href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap"
@@ -174,6 +194,7 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
+        <ThemeHydrator />
         {/* Cinematic grain overlay */}
         <div className="grain-overlay" aria-hidden="true" />
 

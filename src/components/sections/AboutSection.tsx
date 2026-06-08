@@ -58,8 +58,8 @@ function ManifestoTicker() {
     <div
       style={{
         overflow:     "hidden",
-        borderTop:    "1px solid rgba(10,10,10,0.08)",
-        borderBottom: "1px solid rgba(10,10,10,0.08)",
+        borderTop:    "1px solid var(--color-border)",
+        borderBottom: "1px solid var(--color-border)",
         padding:      "1.125rem 0",
         margin:       "clamp(3.5rem, 7vh, 6rem) 0",
         position:     "relative",
@@ -71,7 +71,7 @@ function ManifestoTicker() {
         style={{
           position:   "absolute",
           inset:      0,
-          background: "linear-gradient(to right, #FFFFFF 0%, transparent 8%, transparent 92%, #FFFFFF 100%)",
+          background: "linear-gradient(to right, var(--color-bg-surface) 0%, transparent 8%, transparent 92%, var(--color-bg-surface) 100%)",
           zIndex:     1,
           pointerEvents: "none",
         }}
@@ -86,7 +86,7 @@ function ManifestoTicker() {
           fontSize:   "clamp(1.25rem, 2.5vw, 2.25rem)",
           letterSpacing: "0.05em",
           color:      "transparent",
-          WebkitTextStroke: "1px rgba(10,10,10,0.22)",
+          WebkitTextStroke: "1px var(--color-border-mid)",
           gap:        "0",
           skewX:      skewXSpring,
         }}
@@ -119,10 +119,10 @@ function AudienceCard({ target, index, isInView }: {
       onMouseLeave={() => setHovered(false)}
       style={{
         padding:    "clamp(1.75rem, 3vw, 2.5rem)",
-        borderTop:  "1px solid rgba(10,10,10,0.08)",
+        borderTop:  "1px solid var(--color-border)",
         position:   "relative",
         overflow:   "hidden",
-        background: hovered ? "rgba(201,168,76,0.03)" : "transparent",
+        background: hovered ? "var(--color-gold-dim)" : "transparent",
         transition: "background 0.45s var(--ease-cinematic)",
       }}
     >
@@ -156,7 +156,7 @@ function AudienceCard({ target, index, isInView }: {
             fontSize:      "0.5625rem",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            color:         hovered ? "var(--color-gold)" : "rgba(10,10,10,0.45)",
+            color:         hovered ? "var(--color-gold)" : "var(--color-text-tertiary)",
             transform:     hovered ? "translateX(4px)" : "translateX(0px)",
             transition:    "all 0.4s var(--ease-cinematic)",
             display:       "inline-block",
@@ -169,7 +169,7 @@ function AudienceCard({ target, index, isInView }: {
             fontFamily:    "var(--font-bebas)",
             fontSize:      "clamp(1.5rem, 3vw, 2.25rem)",
             letterSpacing: "0.04em",
-            color:         "var(--color-bg)",
+            color:         "var(--color-text-primary)",
             lineHeight:    1,
           }}
         >
@@ -182,7 +182,7 @@ function AudienceCard({ target, index, isInView }: {
           fontFamily: "var(--font-satoshi)",
           fontSize:   "clamp(0.9rem, 1.2vw, 1rem)",
           lineHeight: 1.7,
-          color:      hovered ? "rgba(10,10,10,0.85)" : "rgba(10,10,10,0.6)",
+          color:      hovered ? "var(--color-text-primary)" : "var(--color-text-secondary)",
           transform:  hovered ? "translateY(-1px)" : "translateY(0px)",
           transition: "all 0.4s var(--ease-cinematic)",
         }}
@@ -209,7 +209,7 @@ export function AboutSection() {
       aria-label="About Vattostudio"
       style={{
         padding:    "clamp(6rem, 11vh, 10rem) 0",
-        background: "#FFFFFF",
+        background: "var(--color-bg-surface)",
         position:   "relative",
         overflow:   "hidden",
       }}
@@ -273,12 +273,12 @@ export function AboutSection() {
                     fontSize:      "clamp(3.5rem, 7vw, 7rem)",
                     letterSpacing: "0.01em",
                     lineHeight:    0.92,
-                    color:         "var(--color-bg)",
+                    color:         "var(--color-text-primary)",
                   }}
                 >
                   Here&apos;s How
                   <br />
-                  <span style={{ color: "transparent", WebkitTextStroke: "1px rgba(10,10,10,0.28)" }}>
+                  <span style={{ color: "transparent", WebkitTextStroke: "1px var(--color-border-mid)" }}>
                     We Work.
                   </span>
                 </motion.h2>
@@ -295,7 +295,7 @@ export function AboutSection() {
                 width: "100%",
                 aspectRatio: "16/10",
                 borderRadius: "4px",
-                border: "1px solid rgba(10,10,10,0.08)",
+                border: "1px solid var(--color-border)",
                 overflow: "hidden",
                 position: "relative",
               }}
@@ -339,7 +339,7 @@ export function AboutSection() {
                 fontFamily: "var(--font-satoshi)",
                 fontSize:   "clamp(1.05rem, 1.4vw, 1.25rem)",
                 lineHeight: 1.75,
-                color:      "var(--color-bg)",
+                color:      "var(--color-text-primary)",
               }}
             >
               Vattostudio started with a simple belief: every brand has a story worth telling.
@@ -350,7 +350,7 @@ export function AboutSection() {
                 fontFamily: "var(--font-satoshi)",
                 fontSize:   "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 lineHeight: 1.75,
-                color:      "rgba(10,10,10,0.65)",
+                color:      "var(--color-text-secondary)",
               }}
             >
               We noticed something. Brands spend money on ads, but nobody&apos;s really listening. You know why? Because they&apos;re selling features instead of telling their truth. Your customers don&apos;t buy what you do — they buy who you are.
@@ -360,7 +360,7 @@ export function AboutSection() {
                 fontFamily: "var(--font-satoshi)",
                 fontSize:   "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 lineHeight: 1.75,
-                color:      "rgba(10,10,10,0.65)",
+                color:      "var(--color-text-secondary)",
               }}
             >
               We help you figure out what that is. Then we turn it into videos that actually stick with people.
@@ -370,7 +370,7 @@ export function AboutSection() {
                 fontFamily: "var(--font-satoshi)",
                 fontSize:   "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 lineHeight: 1.75,
-                color:      "rgba(10,10,10,0.65)",
+                color:      "var(--color-text-secondary)",
               }}
             >
               Whether you already know your origin story or you&apos;re still figuring it out, we work with you to uncover it, shape it, and produce it in a way that makes sense. Motion graphics, documentary-style storytelling, whatever it takes — we build the content that proves who you are.
@@ -384,7 +384,7 @@ export function AboutSection() {
                 gap:                 "1.5rem 1.25rem",
                 marginTop:           "0.5rem",
                 paddingTop:          "1.75rem",
-                borderTop:           "1px solid rgba(10,10,10,0.08)",
+                borderTop:           "1px solid var(--color-border)",
               }}
             >
               {[
@@ -400,7 +400,7 @@ export function AboutSection() {
                       fontSize:      "0.5rem",
                       letterSpacing: "0.2em",
                       textTransform: "uppercase",
-                      color:         "rgba(10,10,10,0.45)",
+                      color:         "var(--color-text-tertiary)",
                       display:       "block",
                       marginBottom:  "0.35rem",
                     }}
@@ -411,7 +411,7 @@ export function AboutSection() {
                     style={{
                       fontFamily: "var(--font-satoshi)",
                       fontSize:   "0.9375rem",
-                      color:      "var(--color-bg)",
+                      color:      "var(--color-text-primary)",
                     }}
                   >
                     {item.value}
