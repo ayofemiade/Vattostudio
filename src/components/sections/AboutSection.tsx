@@ -27,6 +27,26 @@ const TARGETS = [
   },
 ];
 
+/* ─── Single animated word — hooks must live at component level ─── */
+function ScrollWord({
+  word,
+  scrollYProgress,
+  start,
+  end,
+}: {
+  word: string;
+  scrollYProgress: import("framer-motion").MotionValue<number>;
+  start: number;
+  end: number;
+}) {
+  const opacity = useTransform(scrollYProgress, [start, end], [0.15, 1]);
+  return (
+    <motion.span style={{ opacity, willChange: "opacity" }}>
+      {word}
+    </motion.span>
+  );
+}
+
 /* ─── Scroll-Driven Word-Scrubbing Paragraph Reveal ─── */
 function ScrollTextReveal({ text, style }: { text: string; style?: React.CSSProperties }) {
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -48,16 +68,15 @@ function ScrollTextReveal({ text, style }: { text: string; style?: React.CSSProp
         ...style,
       }}
     >
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = (i + 1) / words.length;
-        const opacity = useTransform(scrollYProgress, [start, end], [0.15, 1]);
-        return (
-          <motion.span key={i} style={{ opacity, willChange: "opacity" }}>
-            {word}
-          </motion.span>
-        );
-      })}
+      {words.map((word, i) => (
+        <ScrollWord
+          key={i}
+          word={word}
+          scrollYProgress={scrollYProgress}
+          start={i / words.length}
+          end={(i + 1) / words.length}
+        />
+      ))}
     </span>
   );
 }
@@ -437,7 +456,7 @@ export function AboutSection() {
                   transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
                   style={{ display: "block", width: "28px", height: "1px", background: "var(--color-gold)", transformOrigin: "left" }}
                 />
-                <span className="label-gold">// DESIGNING VISUAL TRUTH</span>
+                <span className="label-gold">DESIGNING VISUAL TRUTH</span>
               </motion.div>
 
               <div style={{ overflow: "hidden" }}>
@@ -587,7 +606,7 @@ export function AboutSection() {
             <div className="hidden lg:block invisible pointer-events-none select-none" aria-hidden="true">
               <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.75rem" }}>
                 <span style={{ display: "block", width: "28px", height: "1px" }} />
-                <span className="label-gold">// DESIGNING VISUAL TRUTH</span>
+                <span className="label-gold">DESIGNING VISUAL TRUTH</span>
               </div>
               <div style={{ overflow: "hidden" }}>
                 <h2 style={{
@@ -705,7 +724,7 @@ export function AboutSection() {
           style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}
         >
           <span style={{ display: "block", width: "28px", height: "1px", background: "var(--color-gold)" }} />
-          <span className="label-gold">// WHO WE WORK WITH</span>
+          <span className="label-gold">WHO WE WORK WITH</span>
         </motion.div>
 
         {/* Asymmetric target partner accordion system */}

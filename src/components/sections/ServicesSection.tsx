@@ -36,7 +36,6 @@ const SERVICES = [
 function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: number }) {
   const [hovered, setHovered] = useState(false);
   const ref                   = useRef<HTMLDivElement>(null);
-  const isInView              = useInView(ref, { once: true, margin: "-8%" });
   const prefersReducedMotion  = useReducedMotion();
 
   return (
