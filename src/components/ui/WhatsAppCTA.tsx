@@ -71,7 +71,7 @@ export function WhatsAppCTA() {
     collapseTimer.current = setTimeout(() => setExpanded(false), 3000);
   };
 
-  const whatsappNumber = "+2348000000000"; // Update with real number
+  const whatsappNumber = "+2348107288180";
   const whatsappMessage = "Hello Vattostudio! I'd love to discuss a project.";
   const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`;
 

@@ -25,6 +25,21 @@ const bentoGridVariants = cva(
           [&>*:nth-child(4)]:col-span-4 md:[&>*:nth-child(4)]:col-span-3
           [&>*:nth-child(5)]:col-span-4 md:[&>*:nth-child(5)]:col-span-3
         `,
+        /* ── 3-video cinematic layout ──────────────────────────────
+           ┌──────────────────────┬────────────┐
+           │  Cell 1 (large)      │  Cell 2    │
+           │  col-span-2 row-1    │  row-span-2│
+           ├──────────────────────┤            │
+           │  Cell 3              │            │
+           │  col-span-2 row-2    │            │
+           └──────────────────────┴────────────┘
+        ─────────────────────────────────────── */
+        threeVideos: `
+          grid-cols-3 grid-rows-2
+          [&>*:first-child]:col-span-2 [&>*:first-child]:row-span-1
+          [&>*:nth-child(2)]:col-span-1 [&>*:nth-child(2)]:row-span-2
+          [&>*:nth-child(3)]:col-span-2 [&>*:nth-child(3)]:row-span-1
+        `,
         threeCells: `
           grid-cols-2 grid-rows-2
           [&>*:first-child]:col-span-2
@@ -102,8 +117,9 @@ interface BentoCellProps extends HTMLMotionProps<"div"> {
 const BentoCell = React.forwardRef<HTMLDivElement, BentoCellProps>(
   ({ className, style, index = 0, ...props }, ref) => {
     const { scrollYProgress } = useContainerScrollContext()
-    
-    // Custom quadrant translations (moving outwards from center)
+
+    // Fly-in vectors — each cell launches from a screen quadrant and assembles to centre
+    // Works for both the 5-cell default layout and the 3-cell threeVideos layout
     let startX = "-35%"
     let startY = "0%"
 
@@ -114,7 +130,8 @@ const BentoCell = React.forwardRef<HTMLDivElement, BentoCellProps>(
       startX = "65%"
       startY = "-55%"
     } else if (index === 2) {
-      startX = "65%"
+      // Bottom-left for 3-video layout (was index 3 in 5-cell layout)
+      startX = "-55%"
       startY = "55%"
     } else if (index === 3) {
       startX = "-55%"
@@ -139,6 +156,7 @@ const BentoCell = React.forwardRef<HTMLDivElement, BentoCellProps>(
   }
 )
 BentoCell.displayName = "BentoCell"
+
 
 const ContainerScale = React.forwardRef<HTMLDivElement, HTMLMotionProps<"div">>(
   ({ className, style, ...props }, ref) => {

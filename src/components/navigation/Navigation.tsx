@@ -60,7 +60,7 @@ const mobileCtaVariants = {
 /* ─── Logo Image ─── */
 function VattoLogoMark({
   glowing = false,
-  height = 56,
+  height = 90,
 }: {
   glowing?: boolean;
   height?: number;
@@ -84,6 +84,7 @@ function VattoLogoMark({
           height: `${height}px`,
           width: "auto",
           display: "block",
+          objectFit: "contain",
         }}
       />
     </motion.div>
@@ -306,7 +307,7 @@ export function Navigation() {
             onMouseEnter={() => setLogoHover(true)}
             onMouseLeave={() => setLogoHover(false)}
           >
-            <VattoLogoMark glowing={logoHover} height={86} />
+            <VattoLogoMark glowing={logoHover} height={160} />
           </a>
 
           {/* Desktop links */}

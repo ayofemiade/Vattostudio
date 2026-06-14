@@ -178,8 +178,7 @@ export default function RootLayout({
                 availableLanguage: "English",
               },
               sameAs: [
-                "https://www.instagram.com/vattostudio",
-                "https://twitter.com/vattostudio",
+                "https://www.instagram.com/vattostudio/",
               ],
               foundingDate: "2021",
               areaServed: ["Nigeria", "Africa", "Worldwide"],

@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useRef, useState, useCallback } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
+import React, {
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
+import { Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ContainerScroll,
@@ -13,86 +17,229 @@ import {
 } from "@/components/ui/hero-gallery-scroll-animation";
 
 /* ════════════════════════════════════════════
-   WORKS DATA — The 5 Selected Luxury Showcases
+   VIDEO WORKS DATA — 3 Real Projects
    ════════════════════════════════════════════ */
 const WORKS = [
   {
     id:          "01",
-    title:       "Achebe Spirits",
-    category:    "Brand Identity",
+    title:       "Motion Reel I",
+    category:    "Motion Graphics",
     year:        "2024",
-    description: "Complete visual identity for a luxury Nigerian spirits brand. From concept to label — a craft distilled into an icon.",
-    image:       "/achebe.png",
+    description: "Kinetic brand storytelling through motion. Typography, transitions, and visual rhythm crafted into a cohesive narrative.",
+    videoSrc:    "/Motion_graohics(720p).mp4",
   },
   {
     id:          "02",
-    title:       "Ìmọ̀lẹ̀ Films",
-    category:    "Film & Campaign",
+    title:       "Motion Reel II",
+    category:    "Motion Design",
     year:        "2024",
-    description: "Campaign production for an independent Nollywood production house. Cinematic stills and motion direction.",
-    image:       "/imole.png",
+    description: "High-production motion identity — bold compositions built for brand recognition at scale.",
+    videoSrc:    "/MOTION_GRAPHICS_1(1080p).mp4",
   },
   {
     id:          "03",
-    title:       "Orisun Wellness",
-    category:    "Digital Experience",
-    year:        "2023",
-    description: "Web presence and visual identity for a Lagos-based wellness brand. Where calm meets clarity.",
-    image:       "/orisun.png",
-  },
-  {
-    id:          "04",
-    title:       "Eko Fashion",
-    category:    "Editorial Campaign",
+    title:       "Web Campaign Ads",
+    category:    "Digital Campaign",
     year:        "2024",
-    description: "Cinematic visual design and storytelling for a luxury African haute couture label. Elevating history into style.",
-    image:       "/eko_fashion.png",
-  },
-  {
-    id:          "05",
-    title:       "Vatto Branding",
-    category:    "Spatial Design",
-    year:        "2023",
-    description: "Minimalist luxury architectural brand experience. Raw concrete geometries meets soft golden illumination.",
-    image:       "/vatto_branding.png",
+    description: "Scroll-stopping web ad creatives engineered for conversion. Motion-led, message-first.",
+    videoSrc:    "/motion_graphics_web_ads(1080p).mp4",
   },
 ];
 
-/* ─── 3D tilt hook ─── */
-function useTilt(ref: React.RefObject<HTMLDivElement | null>, strength = 6) {
+/* ════════════════════════════════════════════
+   VIDEO LIGHTBOX — Full-screen modal player
+   ════════════════════════════════════════════ */
+interface VideoLightboxProps {
+  src:     string;
+  title:   string;
+  onClose: () => void;
+}
+
+function VideoLightbox({ src, title, onClose }: VideoLightboxProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Escape key closes lightbox
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    // Prevent body scroll while open
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  // Pause and clean up when closing
+  const handleClose = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+    onClose();
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      onClick={handleClose} // click backdrop to close
+      style={{
+        position:        "fixed",
+        inset:           0,
+        zIndex:          99999,
+        background:      "rgba(0,0,0,0.95)",
+        backdropFilter:  "blur(8px)",
+        display:         "flex",
+        alignItems:      "center",
+        justifyContent:  "center",
+        padding:         "clamp(1rem, 4vw, 3rem)",
+      }}
+    >
+      {/* Video container — stop click propagation so clicking video doesn't close */}
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position:     "relative",
+          width:        "100%",
+          maxWidth:     "1100px",
+          background:   "#0A0A0A",
+          border:       "1px solid rgba(201,168,76,0.2)",
+          boxShadow:    "0 40px 120px rgba(0,0,0,0.8)",
+        }}
+      >
+        {/* Video element */}
+        <video
+          ref={videoRef}
+          src={src}
+          controls
+          autoPlay
+          playsInline
+          style={{
+            width:   "100%",
+            display: "block",
+            maxHeight: "80vh",
+            objectFit: "contain",
+            background: "#000",
+          }}
+        />
+
+        {/* Title bar */}
+        <div
+          style={{
+            display:        "flex",
+            alignItems:     "center",
+            justifyContent: "space-between",
+            padding:        "0.875rem 1.25rem",
+            borderTop:      "1px solid rgba(201,168,76,0.12)",
+          }}
+        >
+          <span
+            style={{
+              fontFamily:    "var(--font-ibm-plex-mono)",
+              fontSize:      "0.6875rem",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color:         "var(--color-gold)",
+            }}
+          >
+            {title}
+          </span>
+          <span
+            style={{
+              fontFamily:    "var(--font-ibm-plex-mono)",
+              fontSize:      "0.5625rem",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color:         "rgba(255,255,255,0.3)",
+            }}
+          >
+            ESC to close
+          </span>
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={handleClose}
+          aria-label="Close video"
+          style={{
+            position:       "absolute",
+            top:            "-44px",
+            right:          0,
+            width:          "36px",
+            height:         "36px",
+            borderRadius:   "50%",
+            border:         "1px solid rgba(201,168,76,0.4)",
+            background:     "rgba(10,10,10,0.8)",
+            display:        "flex",
+            alignItems:     "center",
+            justifyContent: "center",
+            cursor:         "pointer",
+            color:          "var(--color-gold)",
+            backdropFilter: "blur(4px)",
+          }}
+        >
+          <X size={14} strokeWidth={1.5} />
+        </button>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   VIDEO CARD — Thumbnail + Play Button
+   ════════════════════════════════════════════ */
+interface VideoCardProps {
+  work:    typeof WORKS[0];
+  index:   number;
+  onPlay:  (work: typeof WORKS[0]) => void;
+}
+
+function VideoCard({ work, index, onPlay }: VideoCardProps) {
+  const [hovered, setHovered] = useState(false);
+  const cardRef               = useRef<HTMLDivElement>(null);
+  const videoRef              = useRef<HTMLVideoElement>(null);
+
+  // 3D tilt on mouse move
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      const el = ref.current;
+      const el = cardRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const x    = (e.clientX - rect.left) / rect.width  - 0.5;
       const y    = (e.clientY - rect.top)  / rect.height - 0.5;
-      el.style.transform = `perspective(800px) rotateY(${x * strength}deg) rotateX(${-y * strength}deg) scale3d(1.02, 1.02, 1.02)`;
+      const str  = index === 0 ? 5 : 7;
+      el.style.transform = `perspective(800px) rotateY(${x * str}deg) rotateX(${-y * str}deg) scale3d(1.02,1.02,1.02)`;
     },
-    [ref, strength]
+    [index]
   );
 
   const handleMouseLeave = useCallback(() => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.transform = "perspective(800px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
-  }, [ref]);
+    if (cardRef.current)
+      cardRef.current.style.transform =
+        "perspective(800px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)";
+  }, []);
 
-  return { handleMouseMove, handleMouseLeave };
-}
-
-/* ════════════════════════════════════════════
-   PREMIUM PORTFOLIO CARD (Unified Interface)
-   ════════════════════════════════════════════ */
-interface PortfolioCardProps {
-  work:  typeof WORKS[0];
-  index: number;
-}
-
-function PortfolioCard({ work, index }: PortfolioCardProps) {
-  const [hovered, setHovered] = useState(false);
-  const cardRef               = useRef<HTMLDivElement>(null);
-  const { handleMouseMove, handleMouseLeave } = useTilt(cardRef, index === 0 ? 5 : 7);
+  // Muted preview plays on hover (silent autoplay, for visual interest)
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (hovered) {
+      v.currentTime = 0;
+      v.play().catch(() => {}); // silently ignore if blocked
+    } else {
+      v.pause();
+      v.currentTime = 0;
+    }
+  }, [hovered]);
 
   return (
     <div
@@ -104,19 +251,20 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
         handleMouseLeave();
       }}
       onMouseMove={handleMouseMove}
+      onClick={() => onPlay(work)}
       style={{
-        position:       "relative",
-        width:          "100%",
-        height:         "100%",
-        borderRadius:   "3px",
-        overflow:       "hidden",
-        background:     "var(--color-surface)",
-        transition:     "transform 0.6s var(--ease-cinematic)",
-        border:         "1px solid var(--color-border)",
-        cursor:         "pointer",
+        position:   "relative",
+        width:      "100%",
+        height:     "100%",
+        borderRadius: "3px",
+        overflow:   "hidden",
+        background: "var(--color-surface)",
+        transition: "transform 0.6s var(--ease-cinematic)",
+        border:     "1px solid var(--color-border)",
+        cursor:     "pointer",
       }}
     >
-      {/* Background Image with Zoom & Color State */}
+      {/* Video thumbnail — preload="metadata" loads only first frame, no full download */}
       <div
         style={{
           position:   "absolute",
@@ -125,42 +273,47 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
           transform:  hovered ? "scale(1.06)" : "scale(1)",
         }}
       >
-        <Image
-          src={work.image}
-          alt={work.title}
-          fill
-          priority={index === 0}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        <video
+          ref={videoRef}
+          src={work.videoSrc}
+          preload="metadata"
+          muted
+          playsInline
+          loop
           style={{
+            width:      "100%",
+            height:     "100%",
             objectFit:  "cover",
-            opacity:    hovered ? 0.62 : 0.38,
+            opacity:    hovered ? 0.72 : 0.45,
             transition: "opacity 0.7s var(--ease-cinematic)",
-            filter:     hovered ? "grayscale(0%) contrast(1.05)" : "grayscale(25%) brightness(0.9)",
+            filter:     hovered
+              ? "grayscale(0%) contrast(1.05)"
+              : "grayscale(20%) brightness(0.85)",
           }}
         />
       </div>
 
-      {/* Cinematic Overlays */}
+      {/* Cinematic gradient overlays — identical to original PortfolioCard */}
       <div
         style={{
-          position:   "absolute",
-          inset:      0,
-          background: "linear-gradient(135deg, rgba(10,10,10,0.85) 0%, transparent 60%)",
-          zIndex:     1,
+          position:      "absolute",
+          inset:         0,
+          background:    "linear-gradient(135deg, rgba(10,10,10,0.85) 0%, transparent 60%)",
+          zIndex:        1,
           pointerEvents: "none",
         }}
       />
       <div
         style={{
-          position:   "absolute",
-          inset:      0,
-          background: "linear-gradient(to bottom, transparent 30%, rgba(10,10,10,0.92) 100%)",
-          zIndex:     1,
+          position:      "absolute",
+          inset:         0,
+          background:    "linear-gradient(to bottom, transparent 30%, rgba(10,10,10,0.92) 100%)",
+          zIndex:        1,
           pointerEvents: "none",
         }}
       />
 
-      {/* Gold Left Accent Line */}
+      {/* Gold left accent line */}
       <motion.div
         animate={{ scaleY: hovered ? 1 : 0 }}
         transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
@@ -176,32 +329,78 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
         }}
       />
 
-      {/* Diagonal Shimmer Sweep */}
+      {/* Diagonal shimmer sweep */}
       <motion.div
         animate={{ opacity: hovered ? 1 : 0, x: hovered ? "110%" : "-30%" }}
         transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         style={{
-          position:    "absolute",
-          inset:       "-50%",
-          background:  "linear-gradient(105deg, transparent 40%, rgba(201,168,76,0.06) 50%, transparent 60%)",
-          zIndex:      2,
+          position:      "absolute",
+          inset:         "-50%",
+          background:    "linear-gradient(105deg, transparent 40%, rgba(201,168,76,0.06) 50%, transparent 60%)",
+          zIndex:        2,
           pointerEvents: "none",
         }}
       />
 
-      {/* Card Content */}
-      <div
+      {/* ── PLAY BUTTON — centre of card on hover ── */}
+      <motion.div
+        animate={{
+          opacity: hovered ? 1 : 0,
+          scale:   hovered ? 1 : 0.6,
+        }}
+        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
           position:        "absolute",
-          inset:           0,
+          top:             "50%",
+          left:            "50%",
+          transform:       "translate(-50%, -50%)",
+          zIndex:          4,
+          width:           index === 0 ? "72px" : "56px",
+          height:          index === 0 ? "72px" : "56px",
+          borderRadius:    "50%",
+          border:          "1.5px solid var(--color-gold)",
+          background:      "rgba(201,168,76,0.12)",
+          backdropFilter:  "blur(8px)",
           display:         "flex",
-          flexDirection:   "column",
-          justifyContent:  "space-between",
-          padding:         index === 0 ? "clamp(1.5rem, 3.5vw, 3rem)" : "clamp(1.25rem, 2vw, 2rem)",
-          zIndex:          2,
+          alignItems:      "center",
+          justifyContent:  "center",
+          boxShadow:       "0 0 40px rgba(201,168,76,0.25)",
         }}
       >
-        {/* Top: Serial Number & Gold Accent Arrow */}
+        {/* Pulse ring */}
+        <motion.div
+          animate={hovered ? { scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] } : {}}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+          style={{
+            position:     "absolute",
+            inset:        "-6px",
+            borderRadius: "50%",
+            border:       "1px solid rgba(201,168,76,0.35)",
+          }}
+        />
+        <Play
+          size={index === 0 ? 22 : 18}
+          color="var(--color-gold)"
+          strokeWidth={1.5}
+          style={{ marginLeft: "2px" }} // optical centering
+        />
+      </motion.div>
+
+      {/* Card content — top serial + bottom metadata */}
+      <div
+        style={{
+          position:       "absolute",
+          inset:          0,
+          display:        "flex",
+          flexDirection:  "column",
+          justifyContent: "space-between",
+          padding:        index === 0
+            ? "clamp(1.5rem, 3.5vw, 3rem)"
+            : "clamp(1.25rem, 2vw, 2rem)",
+          zIndex:         3,
+        }}
+      >
+        {/* Top: serial number */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <span
             style={{
@@ -213,31 +412,9 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
           >
             {work.id}
           </span>
-
-          <motion.div
-            animate={{
-              opacity: hovered ? 1 : 0.25,
-              rotate:  hovered ? 0 : -45,
-              x:       hovered ? 0 : 4,
-            }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{
-              width:          index === 0 ? "44px" : "36px",
-              height:         index === 0 ? "44px" : "36px",
-              borderRadius:   "50%",
-              border:         "1px solid var(--color-gold)",
-              background:     "rgba(201,168,76,0.08)",
-              backdropFilter: "blur(4px)",
-              display:        "flex",
-              alignItems:     "center",
-              justifyContent: "center",
-            }}
-          >
-            <ArrowUpRight size={index === 0 ? 16 : 14} color="var(--color-gold)" strokeWidth={1.5} />
-          </motion.div>
         </div>
 
-        {/* Bottom: Metas, Title, and Description */}
+        {/* Bottom: category, title, description */}
         <div>
           <motion.div
             animate={{ y: hovered ? 0 : 3, opacity: hovered ? 1 : 0.72 }}
@@ -256,13 +433,13 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
 
           <div style={{ overflow: "hidden" }}>
             <motion.h3
-              animate={{
-                y: hovered ? 0 : 6,
-              }}
+              animate={{ y: hovered ? 0 : 6 }}
               transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
               style={{
                 fontFamily:    "var(--font-bebas)",
-                fontSize:      index === 0 ? "clamp(2.25rem, 4.5vw, 4.5rem)" : "clamp(1.5rem, 2.5vw, 2.5rem)",
+                fontSize:      index === 0
+                  ? "clamp(2rem, 4vw, 4rem)"
+                  : "clamp(1.5rem, 2.2vw, 2.5rem)",
                 letterSpacing: "0.02em",
                 color:         "#FFFFFF",
                 lineHeight:    0.95,
@@ -274,10 +451,10 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
 
           <motion.p
             animate={{
-              opacity:    hovered ? 1 : 0,
-              y:          hovered ? 0 : 8,
-              marginTop:  hovered ? "0.875rem" : "0rem",
-              maxHeight:  hovered ? "80px" : "0px",
+              opacity:   hovered ? 1 : 0,
+              y:         hovered ? 0 : 8,
+              maxHeight: hovered ? "80px" : "0px",
+              marginTop: hovered ? "0.875rem" : "0rem",
             }}
             transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
@@ -291,6 +468,22 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
           >
             {work.description}
           </motion.p>
+
+          {/* "Click to play" hint fades in on hover */}
+          <motion.div
+            animate={{ opacity: hovered ? 0.5 : 0, y: hovered ? 0 : 4 }}
+            transition={{ duration: 0.35, delay: 0.1 }}
+            style={{
+              marginTop:     "0.625rem",
+              fontFamily:    "var(--font-ibm-plex-mono)",
+              fontSize:      "0.5rem",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color:         "var(--color-gold)",
+            }}
+          >
+            ▶ Click to play
+          </motion.div>
         </div>
       </div>
     </div>
@@ -298,14 +491,17 @@ function PortfolioCard({ work, index }: PortfolioCardProps) {
 }
 
 /* ════════════════════════════════════════════
-   PORTFOLIO SECTION — Main Dynamic Component
+   PORTFOLIO SECTION — Main Component
    ════════════════════════════════════════════ */
 export function PortfolioSection() {
   const prefersReducedMotion = useReducedMotion();
+  const [activeLightbox, setActiveLightbox] = useState<typeof WORKS[0] | null>(null);
 
-  /* References for static mobile entry animations */
-  const mobileHeaderRef = useRef<HTMLDivElement>(null);
+  const mobileHeaderRef     = useRef<HTMLDivElement>(null);
   const isMobileHeaderInView = useInView(mobileHeaderRef, { once: true, margin: "-10%" });
+
+  const openLightbox  = useCallback((work: typeof WORKS[0]) => setActiveLightbox(work), []);
+  const closeLightbox = useCallback(() => setActiveLightbox(null), []);
 
   return (
     <section
@@ -315,64 +511,49 @@ export function PortfolioSection() {
         background: "var(--color-bg-surface)",
         borderTop:  "1px solid var(--color-border)",
         position:   "relative",
-        overflow:   "visible", /* CRITICAL: Must be visible to allow sticky grid locking! */
+        overflow:   "visible",
       }}
     >
-      {/* Ambient Top Glow Layer */}
+      {/* Ambient gold glow */}
       <div
         aria-hidden="true"
         style={{
-          position:   "absolute",
-          top:        "-5%",
-          right:      "0",
-          width:      "50vw",
-          height:     "40vh",
-          background: "radial-gradient(ellipse at 100% 0%, rgba(201,168,76,0.06) 0%, transparent 65%)",
+          position:      "absolute",
+          top:           "-5%",
+          right:         "0",
+          width:         "50vw",
+          height:        "40vh",
+          background:    "radial-gradient(ellipse at 100% 0%, rgba(201,168,76,0.06) 0%, transparent 65%)",
           pointerEvents: "none",
-          zIndex:     1,
+          zIndex:        1,
         }}
       />
 
-      {/* Cinematic Section Spacer (Breathing Room) */}
+      {/* Section breathing room */}
       <div className="h-[14vh] md:h-[24vh] w-full pointer-events-none" />
 
-      {/* ════════════════════════════════════════
-          1. DESKTOP & TABLET: IMMERSIVE SCROLL ASSEMBLY
-         ════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════
+          DESKTOP — Bento scroll assembly (3 videos)
+         ══════════════════════════════════════════ */}
       <div className="hidden md:block">
-        <ContainerScroll className="h-[320vh]">
-          {/* Bento Grid — Sticky container that locks into place during scroll assembly */}
+        {/* 220vh gives enough scroll travel for 3 cards to fly in cleanly */}
+        <ContainerScroll className="h-[220vh]">
           <BentoGrid
-            variant="default"
+            variant="threeVideos"
             className="sticky left-0 top-0 z-0 h-screen w-full p-8 lg:p-12 gap-5"
             style={{ boxSizing: "border-box" }}
           >
-            {WORKS.map((work, index) => {
-              /*
-                Grid classes corresponding to the 'default' CVA bento template:
-                - Child 1: col-span-6 row-span-3 (Featured)
-                - Child 2: col-span-2 row-span-2
-                - Child 3: col-span-2 row-span-2
-                - Child 4: col-span-3
-                - Child 5: col-span-3
-              */
-              return (
-                <BentoCell
-                  key={work.id}
-                  index={index}
-                  className="w-full h-full shadow-2xl relative z-10"
-                  style={{
-                    /* Each cell is styled as a luxury z-10 block to stack on top of the text */
-                    gridArea: undefined, 
-                    transformBox: "fill-box",
-                  }}
-                >
-                  <PortfolioCard work={work} index={index} />
-                </BentoCell>
-              );
-            })}
+            {WORKS.map((work, index) => (
+              <BentoCell
+                key={work.id}
+                index={index}
+                className="w-full h-full shadow-2xl relative z-10"
+              >
+                <VideoCard work={work} index={index} onPlay={openLightbox} />
+              </BentoCell>
+            ))}
 
-            {/* Centered manifesto overlay: absolute-positioned, placed behind the scaling cards (zIndex: 1) as the 6th child */}
+            {/* Manifesto text — fades out as cards fly in */}
             <ContainerScale
               className="flex flex-col items-center justify-center text-center pointer-events-none w-full"
               style={{ zIndex: 1 }}
@@ -391,10 +572,10 @@ export function PortfolioSection() {
                 >
                   <span
                     style={{
-                      display:         "block",
-                      width:           "28px",
-                      height:          "1px",
-                      background:      "var(--color-gold)",
+                      display:    "block",
+                      width:      "28px",
+                      height:     "1px",
+                      background: "var(--color-gold)",
                     }}
                   />
                   <span className="label-gold">Selected Work</span>
@@ -419,9 +600,9 @@ export function PortfolioSection() {
                   <Button
                     className="px-8 py-3 text-xs tracking-widest font-mono uppercase bg-transparent text-[var(--color-text-primary)] border border-[var(--color-border-mid)] hover:border-gold hover:text-gold transition-colors duration-300"
                     style={{
-                      borderRadius: "3px",
-                      borderColor: "var(--color-border-mid)",
-                      fontFamily: "var(--font-ibm-plex-mono)",
+                      borderRadius:  "3px",
+                      borderColor:   "var(--color-border-mid)",
+                      fontFamily:    "var(--font-ibm-plex-mono)",
                       letterSpacing: "0.22em",
                     }}
                     onClick={(e) => {
@@ -438,11 +619,11 @@ export function PortfolioSection() {
         </ContainerScroll>
       </div>
 
-      {/* ════════════════════════════════════════
-          2. MOBILE: TOUCH-OPTIMIZED SCROLL STACK
-         ════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════
+          MOBILE — Touch-optimised vertical stack
+         ══════════════════════════════════════════ */}
       <div className="block md:hidden py-16 px-5 relative z-10">
-        {/* Mobile Section Header */}
+        {/* Mobile section header */}
         <div ref={mobileHeaderRef} style={{ marginBottom: "3rem" }}>
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
@@ -477,36 +658,34 @@ export function PortfolioSection() {
           </motion.h2>
         </div>
 
-        {/* Vertically Scrolling Stack for Flawless Mobile UX */}
+        {/* Video cards — 16:9 ratio, full width, stacked */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          {WORKS.map((work, i) => {
-            return (
-              <motion.div
-                key={work.id}
-                initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-5%" }}
-                transition={{ duration: 0.6, delay: i * 0.05 }}
-                style={{
-                  width: "100%",
-                  aspectRatio: i === 0 ? "4/3" : "1/1", // Larger card for featured main work
-                  minHeight: "260px",
-                }}
-              >
-                <PortfolioCard work={work} index={i} />
-              </motion.div>
-            );
-          })}
+          {WORKS.map((work, i) => (
+            <motion.div
+              key={work.id}
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-5%" }}
+              transition={{ duration: 0.6, delay: i * 0.06 }}
+              style={{
+                width:       "100%",
+                aspectRatio: "16/9",
+                minHeight:   "220px",
+              }}
+            >
+              <VideoCard work={work} index={i} onPlay={openLightbox} />
+            </motion.div>
+          ))}
         </div>
 
-        {/* Mobile Bottom Dynamic Call-To-Action */}
+        {/* Mobile CTA */}
         <div style={{ display: "flex", justifyContent: "center", marginTop: "3.5rem" }}>
           <Button
             className="px-8 py-3 text-xs tracking-widest font-mono uppercase bg-transparent text-[var(--color-text-primary)] border border-[var(--color-border-mid)] hover:border-gold hover:text-gold transition-colors duration-300"
             style={{
-              borderRadius: "3px",
-              borderColor: "var(--color-border-mid)",
-              fontFamily: "var(--font-ibm-plex-mono)",
+              borderRadius:  "3px",
+              borderColor:   "var(--color-border-mid)",
+              fontFamily:    "var(--font-ibm-plex-mono)",
               letterSpacing: "0.22em",
             }}
             onClick={(e) => {
@@ -518,6 +697,20 @@ export function PortfolioSection() {
           </Button>
         </div>
       </div>
+
+      {/* ══════════════════════════════════════════
+          VIDEO LIGHTBOX MODAL
+         ══════════════════════════════════════════ */}
+      <AnimatePresence>
+        {activeLightbox && (
+          <VideoLightbox
+            key="lightbox"
+            src={activeLightbox.videoSrc}
+            title={`${activeLightbox.id} — ${activeLightbox.title}`}
+            onClose={closeLightbox}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

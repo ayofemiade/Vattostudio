@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Instagram, Twitter, LucideIcon } from "lucide-react";
+import { ArrowUpRight, Instagram, LucideIcon } from "lucide-react";
 
 /* ─── Animated Logo Mark ─── */
 function FooterLogoMark() {
@@ -14,12 +14,14 @@ function FooterLogoMark() {
 }
 
 /* ─── Premium Tactile Hover Link ─── */
-function FooterLink({ href, children }: { href: string; children: string }) {
+function FooterLink({ href, children, external }: { href: string; children: string; external?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   return (
     <a
       href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       data-cursor
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -79,7 +81,7 @@ function SocialIcon({ icon: Icon, href, label }: { icon: LucideIcon; href: strin
 const FOOTER_LINKS = {
   Work:     ["Brand Identity", "Campaign Production", "Motion & Film", "Digital Experience"],
   Studio:   ["About", "Process", "Pricing", "Contact"],
-  Social:   ["Instagram", "Twitter / X", "LinkedIn", "Behance"],
+  Social:   ["Instagram"],
 };
 
 /* ═══════════════════════════════════════════
@@ -267,8 +269,7 @@ export function Footer() {
               A creative production studio from Lagos. We reveal the truth in brands.
             </p>
             <div style={{ display: "flex", gap: "1rem" }}>
-              <SocialIcon icon={Instagram} href="https://instagram.com/vattostudio" label="Instagram" />
-              <SocialIcon icon={Twitter} href="https://twitter.com/vattostudio" label="X / Twitter" />
+              <SocialIcon icon={Instagram} href="https://www.instagram.com/vattostudio/" label="Instagram" />
             </div>
           </div>
 
@@ -287,11 +288,28 @@ export function Footer() {
                 {category}
               </p>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.75rem", padding: 0, margin: 0 }}>
-                {links.map((link) => (
-                  <li key={link}>
-                    <FooterLink href="#">{link}</FooterLink>
-                  </li>
-                ))}
+                {links.map((link) => {
+                  let href = "#";
+                  let external = false;
+                  if (category === "Social" && link === "Instagram") {
+                    href = "https://www.instagram.com/vattostudio/";
+                    external = true;
+                  } else if (category === "Studio") {
+                    if (link === "About") href = "#about";
+                    if (link === "Pricing") href = "#pricing";
+                    if (link === "Contact") href = "#contact";
+                    if (link === "Process") href = "#services";
+                  } else if (category === "Work") {
+                    href = "#portfolio";
+                  }
+                  return (
+                    <li key={link}>
+                      <FooterLink href={href} external={external}>
+                        {link}
+                      </FooterLink>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
