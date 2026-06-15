@@ -349,45 +349,47 @@ export function HeroSection() {
           opacity: bgOpacity,
         }}
       >
-        {/* Dark Mode Backdrop */}
-        <motion.div
-          initial={false}
-          animate={{ opacity: theme === "dark" ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-          style={{ position: "absolute", inset: 0 }}
-        >
-          <Image
-            src="/hero-camera.png"
-            alt="Cinematic camera backdrop"
-            fill
-            priority
-            style={{
-              objectFit: "cover",
-              objectPosition: "right center",
-              filter: "grayscale(8%) contrast(1.1) brightness(1.02)",
-            }}
-          />
-        </motion.div>
+        <div className="hero-bg-image-container" style={{ position: "absolute", inset: 0 }}>
+          {/* Dark Mode Backdrop */}
+          <motion.div
+            initial={false}
+            animate={{ opacity: theme === "dark" ? 1 : 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            style={{ position: "absolute", inset: 0 }}
+          >
+            <Image
+              src="/hero-camera.png"
+              alt="Cinematic camera backdrop"
+              fill
+              priority
+              style={{
+                objectFit: "cover",
+                objectPosition: "right center",
+                filter: "grayscale(8%) contrast(1.1) brightness(1.02)",
+              }}
+            />
+          </motion.div>
 
-        {/* Light Mode Backdrop */}
-        <motion.div
-          initial={false}
-          animate={{ opacity: theme === "light" ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-          style={{ position: "absolute", inset: 0 }}
-        >
-          <Image
-            src="/hero-camera-light.png"
-            alt="Light studio camera backdrop"
-            fill
-            priority
-            style={{
-              objectFit: "cover",
-              objectPosition: "right center",
-              filter: "grayscale(3%) contrast(1.03) brightness(1.0)",
-            }}
-          />
-        </motion.div>
+          {/* Light Mode Backdrop */}
+          <motion.div
+            initial={false}
+            animate={{ opacity: theme === "light" ? 1 : 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            style={{ position: "absolute", inset: 0 }}
+          >
+            <Image
+              src="/hero-camera-light.png"
+              alt="Light studio camera backdrop"
+              fill
+              priority
+              style={{
+                objectFit: "cover",
+                objectPosition: "right center",
+                filter: "grayscale(3%) contrast(1.03) brightness(1.0)",
+              }}
+            />
+          </motion.div>
+        </div>
 
         {/* Soft custom gradient blending the left side into the deep background */}
         <div
@@ -648,25 +650,23 @@ export function HeroSection() {
                 fontSize: "0.6875rem",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "var(--color-text-secondary)",
-                transition: "color 0.3s var(--ease-cinematic), border 0.3s var(--ease-cinematic), padding 0.3s var(--ease-cinematic)",
-                padding: theme === "dark" ? "0.75rem 1.5rem" : "0.5rem 0",
-                border: theme === "dark" ? "1px solid transparent" : "none",
+                color: "var(--color-text-primary)",
+                transition: "all 0.4s var(--ease-cinematic)",
+                padding: "1rem 2.25rem",
+                border: "1px solid var(--color-border-mid)",
                 background: "transparent",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                if (theme === "dark") {
-                  el.style.color = "var(--color-gold)";
-                  el.style.borderColor = "var(--color-gold)";
-                } else {
-                  el.style.color = "var(--color-text-primary)";
-                }
+                el.style.color = "var(--color-gold)";
+                el.style.borderColor = "var(--color-gold)";
+                el.style.background = "rgba(201, 168, 76, 0.05)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.color = "var(--color-text-secondary)";
-                if (theme === "dark") el.style.borderColor = "transparent";
+                el.style.color = "var(--color-text-primary)";
+                el.style.borderColor = "var(--color-border-mid)";
+                el.style.background = "transparent";
               }}
             >
               Start a Project

@@ -85,6 +85,8 @@ function VattoLogoMark({
           width: "auto",
           display: "block",
           objectFit: "contain",
+          transform: "scale(1.3)",
+          transformOrigin: "left center",
         }}
       />
     </motion.div>

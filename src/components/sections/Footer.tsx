@@ -4,14 +4,6 @@ import { useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Instagram, LucideIcon } from "lucide-react";
 
-/* ─── Animated Logo Mark ─── */
-function FooterLogoMark() {
-  return (
-    <svg width="44" height="44" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <polygon points="2,4 16,28 30,4 26,4 16,21 6,4" fill="#C9A84C" />
-    </svg>
-  );
-}
 
 /* ─── Premium Tactile Hover Link ─── */
 function FooterLink({ href, children, external }: { href: string; children: string; external?: boolean }) {
@@ -234,27 +226,27 @@ export function Footer() {
             onMouseLeave={() => setBrandHovered(false)}
             style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
-              <div
+            <div
+              style={{
+                marginBottom: "0.25rem",
+                transform: brandHovered ? "scale(1.05)" : "scale(1)",
+                transformOrigin: "left center",
+                transition: "all 0.5s var(--ease-cinematic)",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo-gold.png"
+                alt="Vattostudio logo"
                 style={{
-                  transform: brandHovered ? "rotate(15deg) scale(1.08)" : "rotate(0deg) scale(1)",
-                  transformOrigin: "center",
-                  transition: "all 0.5s var(--ease-cinematic)",
+                  height: "160px",
+                  width: "auto",
+                  display: "block",
+                  objectFit: "contain",
+                  transform: "scale(1.3)",
+                  transformOrigin: "left center",
                 }}
-              >
-                <FooterLogoMark />
-              </div>
-              <span
-                style={{
-                  fontFamily: "var(--font-bebas)",
-                  fontSize: "1.375rem",
-                  letterSpacing: "0.08em",
-                  color: brandHovered ? "var(--color-gold)" : "var(--color-white)",
-                  transition: "color 0.4s var(--ease-cinematic)",
-                }}
-              >
-                VATTOSTUDIO
-              </span>
+              />
             </div>
             <p
               style={{

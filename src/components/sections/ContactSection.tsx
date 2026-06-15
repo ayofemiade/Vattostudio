@@ -17,11 +17,35 @@ export function ContactSection() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    /* In production — wire to Resend / Formspree / email API */
-    setSubmitted(true);
+    if (loading) return;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Submission failed. Please try again.");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputStyle = (field: string) => ({
@@ -335,42 +359,67 @@ export function ContactSection() {
                 </div>
 
                 {/* Submit */}
-                <div>
-                  <button
-                    type="submit"
-                    data-cursor
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "0.75rem",
-                      fontFamily: "var(--font-ibm-plex-mono)",
-                      fontSize: "0.6875rem",
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: "var(--color-bg-deep)",
-                      background: "var(--color-text-primary)",
-                      padding: "1.1rem 2.5rem",
-                      borderRadius: "2px",
-                      border: "1px solid var(--color-text-primary)",
-                      cursor: "pointer",
-                      transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-                    }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget;
-                      el.style.background = "transparent";
-                      el.style.color = "var(--color-text-primary)";
-                      el.style.transform = "translateY(-2px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget;
-                      el.style.background = "var(--color-text-primary)";
-                      el.style.color = "var(--color-bg-deep)";
-                      el.style.transform = "translateY(0)";
-                    }}
-                  >
-                    Send Message
-                    <ArrowUpRight size={13} strokeWidth={1.5} />
-                  </button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                  {error && (
+                    <div
+                      role="alert"
+                      style={{
+                        padding: "1.25rem",
+                        border: "1px solid rgba(220, 38, 38, 0.3)",
+                        background: "rgba(220, 38, 38, 0.05)",
+                        borderRadius: "3px",
+                        color: "#f87171",
+                        fontFamily: "var(--font-satoshi)",
+                        fontSize: "0.875rem",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      <strong style={{ color: "#ef4444", display: "block", marginBottom: "0.25rem", fontFamily: "var(--font-ibm-plex-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>Error</strong>
+                      {error}
+                    </div>
+                  )}
+
+                  <div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      data-cursor={!loading}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.75rem",
+                        fontFamily: "var(--font-ibm-plex-mono)",
+                        fontSize: "0.6875rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: loading ? "var(--color-dim)" : "var(--color-bg-deep)",
+                        background: loading ? "var(--color-border-mid)" : "var(--color-text-primary)",
+                        padding: "1.1rem 2.5rem",
+                        borderRadius: "2px",
+                        border: `1px solid ${loading ? "var(--color-border-mid)" : "var(--color-text-primary)"}`,
+                        cursor: loading ? "not-allowed" : "pointer",
+                        transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                        opacity: loading ? 0.7 : 1,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (loading) return;
+                        const el = e.currentTarget;
+                        el.style.background = "transparent";
+                        el.style.color = "var(--color-text-primary)";
+                        el.style.transform = "translateY(-2px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (loading) return;
+                        const el = e.currentTarget;
+                        el.style.background = "var(--color-text-primary)";
+                        el.style.color = "var(--color-bg-deep)";
+                        el.style.transform = "translateY(0)";
+                      }}
+                    >
+                      {loading ? "Sending..." : "Send Message"}
+                      {!loading && <ArrowUpRight size={13} strokeWidth={1.5} />}
+                    </button>
+                  </div>
                 </div>
               </form>
             )}

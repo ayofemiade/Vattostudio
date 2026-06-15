@@ -229,7 +229,7 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
   ];
 
   return (
-    <div className="flex flex-col lg:flex-row w-full gap-4 min-h-[520px] lg:h-[480px] mt-10">
+    <div className="flex flex-col lg:flex-row w-full gap-4 mt-10 lg:h-[480px]">
       {targets.map((target, idx) => {
         const isActive = activeIdx === idx;
         return (
@@ -237,9 +237,8 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
             key={target.label}
             layout={!prefersReducedMotion ? "position" : false}
             onMouseEnter={() => setActiveIdx(idx)}
-            className="relative overflow-hidden rounded-lg border border-[var(--color-border)] cursor-pointer flex-1 transition-[flex-grow] duration-500 ease-out"
+            className={`about-target-card relative overflow-hidden rounded-lg border border-[var(--color-border)] cursor-pointer ${isActive ? "active" : ""}`}
             style={{
-              flexGrow: isActive ? 2.6 : 1,
               background: "var(--color-bg-surface)",
             }}
           >
@@ -253,12 +252,8 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
                 sizes="(max-width: 1024px) 100vw, 25vw"
                 style={{
                   objectFit: "cover",
-                  filter: isActive 
-                    ? "grayscale(20%) contrast(1.15) brightness(0.55)"
-                    : "grayscale(100%) contrast(0.9) brightness(0.2)",
-                  transition: "filter 0.5s ease-out, transform 0.6s ease-out",
                 }}
-                className={isActive ? "scale-105" : "scale-100"}
+                className={`target-card-image ${isActive ? "scale-105" : "scale-100"}`}
               />
               {/* Gradients */}
               <div
@@ -268,7 +263,7 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
                 }}
               />
               <div
-                className="absolute inset-0"
+                className="target-card-radial-gradient absolute inset-0"
                 style={{
                   background: "radial-gradient(circle at center, rgba(201,168,76,0.08) 0%, transparent 70%)",
                   opacity: isActive ? 1 : 0,
@@ -277,19 +272,20 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
               />
             </div>
 
-            {/* Visual Viewfinder Marks in Card Corners (when active) */}
-            {isActive && !prefersReducedMotion && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.4 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-4 z-10 pointer-events-none"
+            {/* Visual Viewfinder Marks in Card Corners */}
+            {!prefersReducedMotion && (
+              <div
+                className="about-viewfinder-corners absolute inset-4 z-10 pointer-events-none"
+                style={{
+                  opacity: isActive ? 0.4 : 0,
+                  transition: "opacity 0.5s ease-out",
+                }}
               >
                 <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[var(--color-gold)]" />
                 <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[var(--color-gold)]" />
                 <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[var(--color-gold)]" />
                 <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[var(--color-gold)]" />
-              </motion.div>
+              </div>
             )}
 
             {/* Card Content Overlay */}
@@ -299,16 +295,17 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
                 <span className="font-mono text-[10px] tracking-widest text-[var(--color-gold)] font-medium">
                   {target.label}
                 </span>
-                {isActive && (
-                  <motion.span
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 0.95, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="font-mono text-[8px] tracking-[0.2em] uppercase px-2 py-0.5 rounded bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.22)] text-[var(--color-gold)]"
-                  >
-                    Partner Profile
-                  </motion.span>
-                )}
+                <motion.span
+                  initial={false}
+                  animate={{
+                    opacity: isActive ? 0.95 : 0,
+                    y: isActive ? 0 : -5,
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="about-partner-label font-mono text-[8px] tracking-[0.2em] uppercase px-2 py-0.5 rounded bg-[rgba(201,168,76,0.12)] border border-[rgba(201,168,76,0.22)] text-[var(--color-gold)]"
+                >
+                  Partner Profile
+                </motion.span>
               </div>
 
               {/* Card Footer Title/Description */}
@@ -325,7 +322,7 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
                       marginTop: isActive ? 8 : 0,
                     }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="font-body text-xs md:text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-[40ch]"
+                    className="font-body text-xs md:text-sm text-zinc-300 leading-relaxed max-w-[40ch]"
                   >
                     {target.body}
                   </motion.p>

@@ -195,7 +195,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
           style={{
             position:      "absolute",
             inset:         0,
-            background:    "linear-gradient(to right, rgba(var(--color-bg-deep-rgb), 0.96) 0%, rgba(var(--color-bg-deep-rgb), 0.75) 45%, rgba(var(--color-bg-deep-rgb), 0.15) 100%)",
+            background:    "linear-gradient(to right, rgba(8, 8, 8, 0.96) 0%, rgba(8, 8, 8, 0.75) 45%, rgba(8, 8, 8, 0.15) 100%)",
             zIndex:        1,
             pointerEvents: "none",
           }}
@@ -257,7 +257,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
                 fontFamily:    "var(--font-bebas)",
                 fontSize:      "clamp(2.25rem, 4.5vw, 4.25rem)",
                 letterSpacing: "0.02em",
-                color:         "var(--color-text-primary)",
+                color:         hovered ? "#FFFFFF" : "var(--color-text-primary)",
                 lineHeight:    1,
                 marginBottom:  "0.9rem",
                 transition:    "color 0.4s",
@@ -276,7 +276,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
               fontFamily: "var(--font-satoshi)",
               fontSize:   "clamp(0.875rem, 1.2vw, 1rem)",
               lineHeight: 1.75,
-              color:      hovered ? "var(--color-text-primary)" : "var(--color-text-secondary)",
+              color:      hovered ? "rgba(255, 255, 255, 0.85)" : "var(--color-text-secondary)",
               maxWidth:   "54ch",
               transition: "color 0.4s",
             }}
@@ -328,9 +328,9 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
                 fontSize:      "0.5rem",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
-                color:         hovered ? "var(--color-gold)" : "var(--color-text-secondary)",
-                background:    hovered ? "var(--color-gold-dim)" : "var(--color-surface-2)",
-                border:        `1px solid ${hovered ? "var(--color-gold)" : "var(--color-border)"}`,
+                color:         hovered ? "#C9A84C" : "var(--color-text-secondary)",
+                background:    hovered ? "rgba(201, 168, 76, 0.08)" : "var(--color-surface-2)",
+                border:        `1px solid ${hovered ? "#C9A84C" : "var(--color-border)"}`,
                 padding:       "0.25rem 0.5rem",
                 borderRadius:  "2px",
                 whiteSpace:    "nowrap",
@@ -354,14 +354,14 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
               width:          "38px",
               height:         "38px",
               borderRadius:   "50%",
-              border:         "1px solid var(--color-gold)",
+              border:         `1px solid ${hovered ? "#C9A84C" : "var(--color-gold)"}`,
               background:     "rgba(201,168,76,0.08)",
               display:        "flex",
               alignItems:     "center",
               justifyContent: "center",
             }}
           >
-            <ArrowUpRight size={14} color="var(--color-gold)" strokeWidth={1.5} />
+            <ArrowUpRight size={14} color={hovered ? "#C9A84C" : "var(--color-gold)"} strokeWidth={1.5} />
           </motion.div>
         </motion.div>
       </div>
