@@ -41,8 +41,9 @@ export function ContactSection() {
       }
 
       setSubmitted(true);
-    } catch (err: any) {
-      setError(err.message || "Failed to send message. Please try again.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to send message. Please try again.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
