@@ -100,6 +100,47 @@ function VideoLightbox({ src, title, onClose }: VideoLightboxProps) {
         padding:         "clamp(1rem, 4vw, 3rem)",
       }}
     >
+      {/* Close button (Fixed to viewport top-right for clean visibility and touch layout) */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          handleClose();
+        }}
+        aria-label="Close video"
+        style={{
+          position:       "absolute",
+          top:            "clamp(1rem, 4vh, 2.5rem)",
+          right:          "clamp(1rem, 4vw, 2.5rem)",
+          width:          "48px",
+          height:         "48px",
+          borderRadius:   "50%",
+          border:         "1px solid rgba(201,168,76,0.35)",
+          background:     "rgba(10,10,10,0.6)",
+          display:        "flex",
+          alignItems:     "center",
+          justifyContent: "center",
+          cursor:         "pointer",
+          color:          "var(--color-gold)",
+          backdropFilter: "blur(12px)",
+          transition:     "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          zIndex:         100000,
+        }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget;
+          el.style.background = "rgba(201, 168, 76, 0.15)";
+          el.style.borderColor = "var(--color-gold)";
+          el.style.transform = "scale(1.08)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget;
+          el.style.background = "rgba(10,10,10,0.6)";
+          el.style.borderColor = "rgba(201,168,76,0.35)";
+          el.style.transform = "scale(1)";
+        }}
+      >
+        <X size={20} strokeWidth={1.5} />
+      </button>
+
       {/* Video container — stop click propagation so clicking video doesn't close */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
@@ -165,30 +206,6 @@ function VideoLightbox({ src, title, onClose }: VideoLightboxProps) {
             ESC to close
           </span>
         </div>
-
-        {/* Close button */}
-        <button
-          onClick={handleClose}
-          aria-label="Close video"
-          style={{
-            position:       "absolute",
-            top:            "-44px",
-            right:          0,
-            width:          "36px",
-            height:         "36px",
-            borderRadius:   "50%",
-            border:         "1px solid rgba(201,168,76,0.4)",
-            background:     "rgba(10,10,10,0.8)",
-            display:        "flex",
-            alignItems:     "center",
-            justifyContent: "center",
-            cursor:         "pointer",
-            color:          "var(--color-gold)",
-            backdropFilter: "blur(4px)",
-          }}
-        >
-          <X size={14} strokeWidth={1.5} />
-        </button>
       </motion.div>
     </motion.div>
   );
