@@ -452,11 +452,12 @@ function ServiceModal({ service, onClose }: ServiceModalProps) {
         inset:           0,
         zIndex:          99999,
         background:      "rgba(8, 8, 8, 0.95)",
-        backdropFilter:  "blur(16px)",
+        backdropFilter:  "blur(8px)",
         display:         "flex",
         alignItems:      "center",
         justifyContent:  "center",
         padding:         "clamp(1rem, 4vw, 3rem)",
+        willChange:      "opacity",
       }}
     >
       {/* Close button (Fixed to viewport top-right) */}
@@ -502,6 +503,7 @@ function ServiceModal({ service, onClose }: ServiceModalProps) {
 
       {/* Modal Container */}
       <motion.div
+        data-lenis-prevent
         initial={{ scale: 0.95, y: 15, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.95, y: 15, opacity: 0 }}
@@ -517,6 +519,7 @@ function ServiceModal({ service, onClose }: ServiceModalProps) {
           borderRadius: "4px",
           overflowY:    "auto",
           overflowX:    "hidden",
+          willChange:    "opacity, transform",
         }}
         className="max-h-[90vh] md:max-h-[85vh]"
       >
