@@ -699,7 +699,7 @@ export function HeroSection() {
           >
             <StatItem value="60+" label="Projects Delivered" />
             <div style={{ width: "1px", height: "40px", background: "var(--color-border)", alignSelf: "center", margin: "0 clamp(1.5rem, 3vw, 2.5rem)", flexShrink: 0 }} />
-            <StatItem value="4+" label="Years Active" />
+            <StatItem value="5+" label="Years Active" />
             <div style={{ width: "1px", height: "40px", background: "var(--color-border)", alignSelf: "center", margin: "0 clamp(1.5rem, 3vw, 2.5rem)", flexShrink: 0 }} />
             <StatItem value="3" label="Continents Reached" />
 

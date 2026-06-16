@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+
 import Image from "next/image";
 
 const SERVICES = [
@@ -341,28 +341,7 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
             </span>
           ))}
 
-          {/* Arrow indicator */}
-          <motion.div
-            animate={{
-              opacity: hovered ? 1 : 0.35,
-              rotate:  hovered ? 0 : -45,
-              scale:   hovered ? 1.05 : 1,
-            }}
-            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{
-              marginTop:      "0.5rem",
-              width:          "38px",
-              height:         "38px",
-              borderRadius:   "50%",
-              border:         `1px solid ${hovered ? "#C9A84C" : "var(--color-gold)"}`,
-              background:     "rgba(201,168,76,0.08)",
-              display:        "flex",
-              alignItems:     "center",
-              justifyContent: "center",
-            }}
-          >
-            <ArrowUpRight size={14} color={hovered ? "#C9A84C" : "var(--color-gold)"} strokeWidth={1.5} />
-          </motion.div>
+
         </motion.div>
       </div>
     </motion.div>
