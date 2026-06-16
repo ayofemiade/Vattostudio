@@ -68,7 +68,11 @@ function ServiceRow({
     <motion.div
       ref={ref}
       data-cursor
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => {
+        if (typeof window !== "undefined" && window.innerWidth >= 768) {
+          setHovered(true);
+        }
+      }}
       onMouseLeave={() => setHovered(false)}
       className="relative"
     >
@@ -431,11 +435,24 @@ function ServiceModal({ service, onClose }: ServiceModalProps) {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKey);
-    // Prevent body scroll while open
-    document.body.style.overflow = "hidden";
+
+    // Lock scroll with a slight delay to allow the modal entrance animation to start smoothly
+    const timeoutId = setTimeout(() => {
+      document.body.style.overflow = "hidden";
+      const win = window as unknown as { lenis?: { stop: () => void; start: () => void } };
+      if (typeof window !== "undefined" && win.lenis) {
+        win.lenis.stop();
+      }
+    }, 80);
+
     return () => {
       window.removeEventListener("keydown", handleKey);
+      clearTimeout(timeoutId);
       document.body.style.overflow = "";
+      const win = window as unknown as { lenis?: { stop: () => void; start: () => void } };
+      if (typeof window !== "undefined" && win.lenis) {
+        win.lenis.start();
+      }
     };
   }, [onClose]);
 
