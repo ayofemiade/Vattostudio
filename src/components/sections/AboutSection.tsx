@@ -222,8 +222,8 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
   const prefersReducedMotion = useReducedMotion();
 
   const images = [
-    "/founders_owners_about.png",
-    "/marketing_teams_about.png",
+    "/founders_owners_about.png?v=2",
+    "/marketing_teams_about.png?v=2",
     "/growing_smes_about.png",
     "/bold_ambitious_about.png",
   ];
