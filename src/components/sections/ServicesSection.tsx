@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
-
+import { useRef, useState, useEffect } from "react";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, X } from "lucide-react";
 import Image from "next/image";
 
 const SERVICES = [
@@ -13,6 +13,12 @@ const SERVICES = [
     tagline:     "This is for brands who need clarity before content.",
     tags:        ["Clarity", "Strategy", "Narrative"],
     image:       "/brand_identity.png",
+    outcomes: [
+      "Comprehensive Brand Messaging Guide",
+      "Curated Core Story Archetype Document",
+      "Positioning Framework against Competitors",
+      "Tailored Content Strategy Roadmap"
+    ]
   },
   {
     index:       "02",
@@ -21,6 +27,12 @@ const SERVICES = [
     tagline:     "This is for brands who already know their story and need it brought to life.",
     tags:        ["Cinematic", "Production", "Motion"],
     image:       "/campaign_production.png",
+    outcomes: [
+      "Premium Motion Graphics & Animation",
+      "Professional Sound Design & Audio Mix",
+      "Cinematic Grade Color Grading",
+      "Multiple Platform Formats (16:9 & 9:16)"
+    ]
   },
   {
     index:       "03",
@@ -29,11 +41,25 @@ const SERVICES = [
     tagline:     "This is our most complete offer. Everything in one place.",
     tags:        ["Discovery + Video", "Turnkey", "3-4 Weeks"],
     image:       "/motion_film.png",
+    outcomes: [
+      "1x High-End Hero Origin Film (2-3m)",
+      "4x Staggered Story Cutdowns for Socials",
+      "Full Scriptwriting & Storyboarding Services",
+      "Guaranteed Turnkey Delivery in 3-4 Weeks"
+    ]
   },
 ];
 
 /* ─── Single service row ─── */
-function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: number }) {
+function ServiceRow({
+  service,
+  index,
+  onOpen,
+}: {
+  service: typeof SERVICES[0];
+  index: number;
+  onOpen: (service: typeof SERVICES[0]) => void;
+}) {
   const [hovered, setHovered] = useState(false);
   const ref                   = useRef<HTMLDivElement>(null);
   const prefersReducedMotion  = useReducedMotion();
@@ -66,7 +92,11 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
           MOBILE LAYOUT — Card style: image top, text bottom
           Hidden on md+ screens
       ══════════════════════════════════════════════ */}
-      <div className="md:hidden flex flex-col">
+      <div
+        className="md:hidden flex flex-col"
+        onClick={() => onOpen(service)}
+        style={{ cursor: "pointer" }}
+      >
         {/* Mobile image thumbnail — always visible */}
         <div className="relative w-full overflow-hidden" style={{ height: "200px" }}>
           <Image
@@ -104,16 +134,33 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
 
         {/* Mobile text content — clean dark area */}
         <div className="px-5 pt-4 pb-8">
-          <h3
-            className="font-display leading-none mb-3"
-            style={{
-              fontSize: "clamp(2.25rem, 9vw, 3.5rem)",
-              letterSpacing: "0.02em",
-              color: "var(--color-white)",
-            }}
-          >
-            {service.title}
-          </h3>
+          <div className="flex items-center justify-between gap-4 mb-3">
+            <h3
+              className="font-display leading-none"
+              style={{
+                fontSize: "clamp(2.25rem, 9vw, 3.5rem)",
+                letterSpacing: "0.02em",
+                color: "var(--color-white)",
+              }}
+            >
+              {service.title}
+            </h3>
+            <div
+              style={{
+                width:          "34px",
+                height:         "34px",
+                borderRadius:   "50%",
+                border:         "1px solid var(--color-gold)",
+                background:     "rgba(201,168,76,0.08)",
+                display:        "flex",
+                alignItems:     "center",
+                justifyContent: "center",
+                flexShrink:     0,
+              }}
+            >
+              <ArrowUpRight size={14} color="var(--color-gold)" strokeWidth={1.5} />
+            </div>
+          </div>
           <p
             className="font-body text-[14.5px] leading-relaxed mb-4"
             style={{ color: "var(--color-text-secondary)", maxWidth: "42ch" }}
@@ -150,12 +197,13 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
       ══════════════════════════════════════════════ */}
       <div
         className="hidden md:grid"
+        onClick={() => onOpen(service)}
         style={{
           gridTemplateColumns: "4rem 1fr auto",
           alignItems:      "center",
           gap:             "clamp(1.5rem, 3vw, 3.5rem)",
           padding:         "clamp(2.5rem, 5vh, 4rem) clamp(1rem, 3vw, 2.5rem)",
-          cursor:          "default",
+          cursor:          "pointer",
           position:        "relative",
           overflow:        "hidden",
           transition:      "all 0.6s var(--ease-cinematic)",
@@ -341,9 +389,246 @@ function ServiceRow({ service, index }: { service: typeof SERVICES[0]; index: nu
             </span>
           ))}
 
-
+          {/* Arrow indicator */}
+          <motion.div
+            animate={{
+              opacity: hovered ? 1 : 0.35,
+              rotate:  hovered ? 0 : -45,
+              scale:   hovered ? 1.05 : 1,
+            }}
+            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            style={{
+              marginTop:      "0.5rem",
+              width:          "38px",
+              height:         "38px",
+              borderRadius:   "50%",
+              border:         `1px solid ${hovered ? "#C9A84C" : "var(--color-gold)"}`,
+              background:     "rgba(201,168,76,0.08)",
+              display:        "flex",
+              alignItems:     "center",
+              justifyContent: "center",
+            }}
+          >
+            <ArrowUpRight size={14} color={hovered ? "#C9A84C" : "var(--color-gold)"} strokeWidth={1.5} />
+          </motion.div>
         </motion.div>
       </div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   SERVICE DETAILS MODAL
+   ═══════════════════════════════════════════ */
+interface ServiceModalProps {
+  service: typeof SERVICES[0];
+  onClose: () => void;
+}
+
+function ServiceModal({ service, onClose }: ServiceModalProps) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    // Prevent body scroll while open
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      onClick={onClose}
+      style={{
+        position:        "fixed",
+        inset:           0,
+        zIndex:          99999,
+        background:      "rgba(8, 8, 8, 0.95)",
+        backdropFilter:  "blur(16px)",
+        display:         "flex",
+        alignItems:      "center",
+        justifyContent:  "center",
+        padding:         "clamp(1rem, 4vw, 3rem)",
+      }}
+    >
+      {/* Close button (Fixed to viewport top-right) */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        aria-label="Close details"
+        style={{
+          position:       "absolute",
+          top:            "clamp(1rem, 4vh, 2.5rem)",
+          right:          "clamp(1rem, 4vw, 2.5rem)",
+          width:          "48px",
+          height:         "48px",
+          borderRadius:   "50%",
+          border:         "1px solid rgba(201,168,76,0.35)",
+          background:     "rgba(10,10,10,0.6)",
+          display:        "flex",
+          alignItems:     "center",
+          justifyContent: "center",
+          cursor:         "pointer",
+          color:          "var(--color-gold)",
+          backdropFilter: "blur(12px)",
+          transition:     "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          zIndex:         100000,
+        }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget;
+          el.style.background = "rgba(201, 168, 76, 0.15)";
+          el.style.borderColor = "var(--color-gold)";
+          el.style.transform = "scale(1.08)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget;
+          el.style.background = "rgba(10,10,10,0.6)";
+          el.style.borderColor = "rgba(201,168,76,0.35)";
+          el.style.transform = "scale(1)";
+        }}
+      >
+        <X size={20} strokeWidth={1.5} />
+      </button>
+
+      {/* Modal Container */}
+      <motion.div
+        initial={{ scale: 0.95, y: 15, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.95, y: 15, opacity: 0 }}
+        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position:     "relative",
+          width:        "100%",
+          maxWidth:     "1000px",
+          background:   "linear-gradient(135deg, rgba(15,15,15,0.95) 0%, rgba(8,8,8,0.98) 100%)",
+          border:       "1px solid rgba(201,168,76,0.25)",
+          boxShadow:    "0 40px 120px rgba(0,0,0,0.85)",
+          borderRadius: "4px",
+          overflowY:    "auto",
+          overflowX:    "hidden",
+        }}
+        className="max-h-[90vh] md:max-h-[85vh]"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-12">
+          {/* Left Side: Cinematic image cover */}
+          <div className="relative col-span-1 md:col-span-5 h-[200px] md:h-auto min-h-[200px] md:min-h-[500px]">
+            <Image
+              src={service.image}
+              alt={service.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center 40%",
+                filter: "grayscale(10%) contrast(1.1) brightness(0.65)",
+              }}
+            />
+            {/* Overlay Gradient */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to bottom, transparent 30%, rgba(8,8,8,0.95) 100%)",
+              }}
+              className="md:hidden"
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to right, transparent 50%, rgba(8,8,8,0.98) 100%)",
+              }}
+              className="hidden md:block"
+            />
+            {/* Service Index Indicator */}
+            <div className="absolute top-6 left-6 flex items-center gap-3">
+              <span className="font-mono text-xs tracking-widest text-gold/80 bg-black/60 px-3 py-1 border border-gold/20 rounded-[2px] backdrop-blur-md">
+                SERVICE {service.index}
+              </span>
+            </div>
+          </div>
+
+          {/* Right Side: Service Details */}
+          <div className="col-span-1 md:col-span-7 p-5 sm:p-8 md:p-10 flex flex-col justify-between">
+            <div>
+              {/* Category tags */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {service.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="font-mono text-[9px] uppercase tracking-[0.16em] px-2.5 py-1.5 rounded-[2px]"
+                    style={{
+                      color: "var(--color-gold)",
+                      background: "rgba(201, 168, 76, 0.05)",
+                      border: "1px solid rgba(201, 168, 76, 0.2)",
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Title */}
+              <h2
+                className="font-display leading-none mb-3"
+                style={{
+                  fontSize: "clamp(2rem, 4.5vw, 4rem)",
+                  letterSpacing: "0.02em",
+                  color: "var(--color-white)",
+                }}
+              >
+                {service.title}
+              </h2>
+
+              {/* Tagline */}
+              {service.tagline && (
+                <p className="font-body text-xs sm:text-sm italic mb-4 text-gold/90 font-medium">
+                  {service.tagline}
+                </p>
+              )}
+
+              {/* Divider */}
+              <div className="h-[1px] w-full mb-4" style={{ background: "rgba(255,255,255,0.08)" }} />
+
+              {/* Detailed Description */}
+              <p
+                className="font-body text-[14px] sm:text-[15px] leading-relaxed mb-5"
+                style={{ color: "var(--color-text-secondary)" }}
+              >
+                {service.description}
+              </p>
+
+              {/* Outcomes / Deliverables */}
+              {service.outcomes && service.outcomes.length > 0 && (
+                <div className="mb-5">
+                  <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50 mb-3">
+                    What You Get / Key Deliverables
+                  </h4>
+                  <ul className="space-y-2.5">
+                    {service.outcomes.map((outcome, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <span className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gold" />
+                        <span className="font-body text-xs sm:text-sm text-white/90 leading-snug">{outcome}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -355,6 +640,7 @@ export function ServicesSection() {
   const headingRef           = useRef<HTMLDivElement>(null);
   const isHeadingInView      = useInView(headingRef, { once: true, margin: "-12%" });
   const prefersReducedMotion = useReducedMotion();
+  const [selectedService, setSelectedService] = useState<typeof SERVICES[0] | null>(null);
 
   return (
     <section
@@ -467,10 +753,25 @@ export function ServicesSection() {
             />
           </div>
           {SERVICES.map((service, i) => (
-            <ServiceRow key={service.index} service={service} index={i} />
+            <ServiceRow
+              key={service.index}
+              service={service}
+              index={i}
+              onOpen={setSelectedService}
+            />
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedService && (
+          <ServiceModal
+            key="service-modal"
+            service={selectedService}
+            onClose={() => setSelectedService(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
