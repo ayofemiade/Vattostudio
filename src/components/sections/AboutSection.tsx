@@ -8,22 +8,22 @@ const TARGETS = [
   {
     label: "01",
     title: "Founders & Owners",
-    body:  "For brand owners and founders who know their brand is more than a logo. We extract your origin story and build an undeniable world around it.",
+    body: "For brand owners and founders who know their brand is more than a logo. We extract your origin story and build an undeniable world around it.",
   },
   {
     label: "02",
     title: "Marketing Teams",
-    body:  "For marketing teams and managers ready to stop selling features and start telling their truth through cinematic, high-impact video content.",
+    body: "For marketing teams and managers ready to stop selling features and start telling their truth through cinematic, high-impact video content.",
   },
   {
     label: "03",
     title: "Growing SMEs",
-    body:  "For small and medium enterprises ready to build authority, scale their presence, and build a community that actually listens.",
+    body: "For small and medium enterprises ready to build authority, scale their presence, and build a community that actually listens.",
   },
   {
     label: "04",
     title: "The Bold & Ambitious",
-    body:  "For the rebels and visionaries who refuse to blend into the industry background, ready to assert who they are and be remembered.",
+    body: "For the rebels and visionaries who refuse to blend into the industry background, ready to assert who they are and be remembered.",
   },
 ];
 
@@ -101,32 +101,32 @@ function ManifestoTicker() {
   const repeated = `${text}  ${text}  `;
 
   /* Scroll velocity tracking */
-  const { scrollY }    = useScroll();
+  const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
-  
+
   /* Map scroll velocity to horizontal text skewing (-8deg to 8deg) */
-  const skewX          = useTransform(scrollVelocity, [-2000, 2000], [-8, 8]);
-  const skewXSpring    = useSpring(skewX, { stiffness: 90, damping: 25 });
+  const skewX = useTransform(scrollVelocity, [-2000, 2000], [-8, 8]);
+  const skewXSpring = useSpring(skewX, { stiffness: 90, damping: 25 });
 
   return (
     <div
       style={{
-        overflow:     "hidden",
-        borderTop:    "1px solid var(--color-border)",
+        overflow: "hidden",
+        borderTop: "1px solid var(--color-border)",
         borderBottom: "1px solid var(--color-border)",
-        padding:      "1.125rem 0",
-        margin:       "clamp(3.5rem, 7vh, 6rem) 0",
-        position:     "relative",
+        padding: "1.125rem 0",
+        margin: "clamp(3.5rem, 7vh, 6rem) 0",
+        position: "relative",
       }}
       aria-hidden="true"
     >
       {/* Left + right fade overlays */}
       <div
         style={{
-          position:   "absolute",
-          inset:      0,
+          position: "absolute",
+          inset: 0,
           background: "linear-gradient(to right, var(--color-bg-surface) 0%, transparent 8%, transparent 92%, var(--color-bg-surface) 100%)",
-          zIndex:     1,
+          zIndex: 1,
           pointerEvents: "none",
         }}
       />
@@ -134,16 +134,16 @@ function ManifestoTicker() {
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 35, ease: "linear", repeat: Infinity }}
         style={{
-          display:    "flex",
+          display: "flex",
           whiteSpace: "nowrap",
           fontFamily: "var(--font-bebas)",
-          fontSize:   "clamp(1.25rem, 2.5vw, 2.25rem)",
+          fontSize: "clamp(1.25rem, 2.5vw, 2.25rem)",
           letterSpacing: "0.05em",
-          color:      "transparent",
+          color: "transparent",
           WebkitTextStroke: "1px var(--color-ticker-stroke)",
-          opacity:    0.5,
-          gap:        "0",
-          skewX:      skewXSpring,
+          opacity: 0.5,
+          gap: "0",
+          skewX: skewXSpring,
         }}
       >
         {repeated}
@@ -222,8 +222,8 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
   const prefersReducedMotion = useReducedMotion();
 
   const images = [
-    "/founders_owners_about.png?v=2",
-    "/marketing_teams_about.png?v=2",
+    "/founders.jpg",
+    "/marketing.jpg",
     "/growing_smes_about.png",
     "/bold_ambitious_about.png",
   ];
@@ -340,10 +340,10 @@ function TargetAccordion({ targets }: { targets: typeof TARGETS }) {
    ABOUT COMPONENT (THE STUDIO)
    ═══════════════════════════════════════════ */
 export function AboutSection() {
-  const headingRef           = useRef<HTMLDivElement>(null);
-  const valuesRef            = useRef<HTMLDivElement>(null);
-  const isHeadingInView      = useInView(headingRef, { once: true, margin: "-12%" });
-  const isValuesInView       = useInView(valuesRef,  { once: true, margin: "-8%"  });
+  const headingRef = useRef<HTMLDivElement>(null);
+  const valuesRef = useRef<HTMLDivElement>(null);
+  const isHeadingInView = useInView(headingRef, { once: true, margin: "-12%" });
+  const isValuesInView = useInView(valuesRef, { once: true, margin: "-8%" });
   const prefersReducedMotion = useReducedMotion();
 
   /* Spotlight mouse tracking */
@@ -386,10 +386,10 @@ export function AboutSection() {
       onMouseMove={handleMouseMove}
       aria-label="About Vattostudio"
       style={{
-        padding:    "clamp(6rem, 11vh, 10rem) 0",
+        padding: "clamp(6rem, 11vh, 10rem) 0",
         background: "var(--color-bg-surface)",
-        position:   "relative",
-        overflow:   "clip",
+        position: "relative",
+        overflow: "clip",
       }}
     >
       {/* Dynamic Cursor Spotlight Layer */}
@@ -409,12 +409,12 @@ export function AboutSection() {
       <div
         aria-hidden="true"
         style={{
-          position:      "absolute",
-          top:           "-5%",
-          right:         "-5%",
-          width:         "45vw",
-          height:        "45vh",
-          background:    "radial-gradient(ellipse at 100% 0%, rgba(201,168,76,0.06) 0%, transparent 65%)",
+          position: "absolute",
+          top: "-5%",
+          right: "-5%",
+          width: "45vw",
+          height: "45vh",
+          background: "radial-gradient(ellipse at 100% 0%, rgba(201,168,76,0.06) 0%, transparent 65%)",
           pointerEvents: "none",
           zIndex: 0,
         }}
@@ -423,8 +423,8 @@ export function AboutSection() {
       <div
         style={{
           maxWidth: "1440px",
-          margin:   "0 auto",
-          padding:  "0 clamp(1.25rem, 5vw, 3rem)",
+          margin: "0 auto",
+          padding: "0 clamp(1.25rem, 5vw, 3rem)",
           position: "relative",
           zIndex: 2,
         }}
@@ -462,11 +462,11 @@ export function AboutSection() {
                   animate={isHeadingInView ? { clipPath: "inset(0% 0 0 0)", y: 0 } : {}}
                   transition={{ delay: 0.1, duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
                   style={{
-                    fontFamily:    "var(--font-bebas)",
-                    fontSize:      "clamp(3.5rem, 7vw, 7rem)",
+                    fontFamily: "var(--font-bebas)",
+                    fontSize: "clamp(3.5rem, 7vw, 7rem)",
                     letterSpacing: "0.01em",
-                    lineHeight:    0.92,
-                    color:         "var(--color-text-primary)",
+                    lineHeight: 0.92,
+                    color: "var(--color-text-primary)",
                   }}
                 >
                   Here&apos;s How
@@ -607,10 +607,10 @@ export function AboutSection() {
               </div>
               <div style={{ overflow: "hidden" }}>
                 <h2 style={{
-                  fontFamily:    "var(--font-bebas)",
-                  fontSize:      "clamp(3.5rem, 7vw, 7rem)",
+                  fontFamily: "var(--font-bebas)",
+                  fontSize: "clamp(3.5rem, 7vw, 7rem)",
                   letterSpacing: "0.01em",
-                  lineHeight:    0.92,
+                  lineHeight: 0.92,
                 }}>
                   Here&apos;s How
                   <br />
@@ -627,19 +627,19 @@ export function AboutSection() {
               text="Vattostudio started with a simple belief: every brand has a story worth telling. Not a mission statement. Not a tagline. A real story — the one about how you started, why you matter, what problem you solved, and what you actually stand for."
               style={{
                 fontFamily: "var(--font-satoshi)",
-                fontSize:   "clamp(1.05rem, 1.4vw, 1.25rem)",
+                fontSize: "clamp(1.05rem, 1.4vw, 1.25rem)",
                 lineHeight: 1.75,
-                color:      "var(--color-text-primary)",
+                color: "var(--color-text-primary)",
               }}
             />
-            
+
             <ScrollTextReveal
               text="We noticed something. Brands spend money on ads, but nobody's really listening. You know why? Because they're selling features instead of telling their truth. Your customers don't buy what you do — they buy who you are."
               style={{
                 fontFamily: "var(--font-satoshi)",
-                fontSize:   "clamp(0.9375rem, 1.2vw, 1.0625rem)",
+                fontSize: "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 lineHeight: 1.75,
-                color:      "var(--color-text-secondary)",
+                color: "var(--color-text-secondary)",
               }}
             />
 
@@ -647,9 +647,9 @@ export function AboutSection() {
               text="We help you figure out what that is. Then we turn it into videos that actually stick with people."
               style={{
                 fontFamily: "var(--font-satoshi)",
-                fontSize:   "clamp(0.9375rem, 1.2vw, 1.0625rem)",
+                fontSize: "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 lineHeight: 1.75,
-                color:      "var(--color-text-secondary)",
+                color: "var(--color-text-secondary)",
               }}
             />
 
@@ -657,39 +657,39 @@ export function AboutSection() {
               text="Whether you already know your origin story or you're still figuring it out, we work with you to uncover it, shape it, and produce it in a way that makes sense. Motion graphics, documentary-style storytelling, whatever it takes — we build the content that proves who you are."
               style={{
                 fontFamily: "var(--font-satoshi)",
-                fontSize:   "clamp(0.9375rem, 1.2vw, 1.0625rem)",
+                fontSize: "clamp(0.9375rem, 1.2vw, 1.0625rem)",
                 lineHeight: 1.75,
-                color:      "var(--color-text-secondary)",
+                color: "var(--color-text-secondary)",
               }}
             />
 
             {/* Studio Meta Table */}
             <div
               style={{
-                display:             "grid",
+                display: "grid",
                 gridTemplateColumns: "1fr 1fr",
-                gap:                 "1.5rem 1.25rem",
-                marginTop:           "0.5rem",
-                paddingTop:          "1.75rem",
-                borderTop:           "1px solid var(--color-border)",
+                gap: "1.5rem 1.25rem",
+                marginTop: "0.5rem",
+                paddingTop: "1.75rem",
+                borderTop: "1px solid var(--color-border)",
               }}
             >
               {[
-                { label: "Founded",   value: "2021" },
-                { label: "Location",  value: "Lagos, NG" },
+                { label: "Founded", value: "2021" },
+                { label: "Location", value: "Lagos, NG" },
                 { label: "Team size", value: "Tight. Intentional." },
-                { label: "Approach",  value: "Quality over volume" },
+                { label: "Approach", value: "Quality over volume" },
               ].map((item) => (
                 <div key={item.label}>
                   <span
                     style={{
-                      fontFamily:    "var(--font-ibm-plex-mono)",
-                      fontSize:      "0.5rem",
+                      fontFamily: "var(--font-ibm-plex-mono)",
+                      fontSize: "0.5rem",
                       letterSpacing: "0.2em",
                       textTransform: "uppercase",
-                      color:         "var(--color-text-tertiary)",
-                      display:       "block",
-                      marginBottom:  "0.35rem",
+                      color: "var(--color-text-tertiary)",
+                      display: "block",
+                      marginBottom: "0.35rem",
                     }}
                   >
                     {item.label}
@@ -697,8 +697,8 @@ export function AboutSection() {
                   <span
                     style={{
                       fontFamily: "var(--font-satoshi)",
-                      fontSize:   "0.9375rem",
-                      color:      "var(--color-text-primary)",
+                      fontSize: "0.9375rem",
+                      color: "var(--color-text-primary)",
                     }}
                   >
                     {item.value}
